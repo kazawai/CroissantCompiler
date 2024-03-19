@@ -1,0 +1,43 @@
+
+
+?start: ar_expr 
+    | expr
+
+    ?expr: decla
+
+    ?decla: INTEGER_TYPE VARIABLE "=" ar_expr ";" -> declaration
+        | BOOLEAN_TYPE VARIABLE "=" BOOLEAN_VALUE ";" -> declaration
+        | STRING_TYPE VARIABLE "=" STRING_VALUE ";" -> declaration
+        | VARIABLE ";" -> call
+    
+    ?ar_expr: term
+        | ar_expr "+" term -> add
+        | ar_expr "-" term -> sub
+
+    ?term: factor
+        | term "*" factor -> mul
+        | term "/" factor -> div
+
+    ?factor: NUMBER     -> number
+           | "-" factor -> neg
+           | "(" ar_expr ")"
+
+TYPE: /INTEGER|BOOLEAN|STRING|LIST/
+
+INTEGER_TYPE: "entier"
+BOOLEAN_TYPE: "booléen"
+STRING_TYPE: "texte"
+LIST_TYPE: "liste"
+
+INTEGER_VALUE: /"-"?[0-9]+/
+BOOLEAN_VALUE: "vrai"|"faux"
+STRING_VALUE: /\w/
+
+VARIABLE: /[a-zA-Zé_][a-zA-Zé_0-9]*/
+
+
+COMMENT: "#" /[^\n]/*
+%ignore COMMENT 
+%ignore " "
+
+%import common.NUMBER
