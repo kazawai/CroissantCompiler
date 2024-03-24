@@ -1,16 +1,17 @@
 ?start: statement+
 
-    ?statement: assigment ";" -> assigment
-        | expression ";" -> expression
+    ?statement: assignment DELIMITER -> statement
+        | condition DELIMITER -> statement
+        | loop DELIMITER -> statement
+        | expression DELIMITER -> statement
         
-        
-    ?assigment: KEYWORDS IDENTIFIER -> declaration
-        | KEYWORDS IDENTIFIER "=" expression  -> instanciation
+    ?assignment: TYPE IDENTIFIER "=" expression -> assignment
 
-    ?expression: boolean_e -> boolean_exp
-        | arithmetic_e -> arithmetic_exp
-        | string_e -> string_exp
-        | list_e -> list_exp
+    ?expression: arithmetic_e -> arithmetic
+        | boolean_e -> boolean
+        | list_e -> list
+        | string_e -> string
+        | var_access -> var_access
 
     ?boolean_e: BOOLEAN_VALUE -> atomic_value
         | "non" boolean_e -> negation
@@ -18,19 +19,45 @@
         | boolean_e "ou" boolean_e -> disjonct
 
     ?list_e: "[]" -> atomic_value
+        | "[" expression ("," expression)* "]" -> list_exp
+        | "[" arithmetic_e ":" arithmetic_e "]" -> range_list
+        | "ajouter" expression "à" list_e -> add_to_list
+        | "taille" list_e -> length_list
+        | list_e "[" arithmetic_e "]" -> get_at_index
 
     ?arithmetic_e: INTEGER_VALUE -> atomic_value
+        | arithmetic_e arithmetic_op arithmetic_e -> arithmetic_op
+        | "(" arithmetic_e ")" -> parenthesis
 
     ?string_e: TEXT_VALUE -> atomic_value
+        | "taille" string_e -> length_string
+        | string_e "[" arithmetic_e "]" -> char_at
+        | string_e "+" string_e -> concat_string
 
-KEYWORDS: /texte|entier|liste|booléen/
+    ?block: "{" statement* "}"
 
+    ?condition: "si" boolean_e "alors" block ("sinon" block)? -> if_else
+
+    ?loop: "tant" "que" boolean_e "faire" block -> while
+        | "pour" "chaque" TYPE IDENTIFIER "dans" expression "faire" block -> for
+
+    ?comparison: expression ("vaut" | "==") expression -> eq
+        | expression ("ne vaut pas" | "!=") expression -> neq
+
+    ?arithmetic_op: "+" | "-" | "*" | "/" | ">" | ">=" | "<" | "<="
+
+    ?var_access: IDENTIFIER -> var_access
+
+
+// Tokens
+TYPE: /entier|texte|liste|booléen/
+
+INTEGER_VALUE: /[0-9]+/
+TEXT_VALUE: /"[^"]*"/
+BOOLEAN_VALUE: "vrai" | "faux"
 IDENTIFIER: /[_a-zA-Zé][\wé_]*/
-TEXT_VALUE: /".*"/
-INTEGER_VALUE: /(-)?[1-9][0-9]*/
-BOOLEAN_VALUE: /faux|vrai/
 
-DELIMITER: /";"|"{"|"}"/ 
+DELIMITER: ";" 
 
 COMMENT: "#" /[^\n]/*
 %ignore COMMENT 
