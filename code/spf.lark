@@ -1,0 +1,34 @@
+?start: statement+ -> interpret
+
+    ?statement: KEYWORDS IDENTIFIER ";"-> declaration
+        | KEYWORDS IDENTIFIER "=" expression ";"  -> instanciation
+        | expression ";" -> expression
+
+    ?expression: boolean_e
+        | arithmetic_e
+        | string_e
+        | list_e
+
+    ?boolean_e: BOOLEAN_VALUE -> boolean_atomic_value
+        | "non" boolean_e -> negation
+        | boolean_e "et" boolean_e -> conjunction
+        | boolean_e "ou" boolean_e -> disjunction
+
+    ?list_e: "[]" -> list_atomic_value
+
+    ?arithmetic_e: INTEGER_VALUE -> integer_atomic_value
+
+    ?string_e: TEXT_VALUE -> string_atomic_value
+
+KEYWORDS: /texte|entier|liste|booléen/
+
+IDENTIFIER: /[_a-zA-Zé][\wé_]*/
+TEXT_VALUE: /".*"/
+INTEGER_VALUE: /(-)?[1-9][0-9]*/
+BOOLEAN_VALUE: /faux|vrai/
+
+DELIMITER: /";"|"{"|"}"/
+
+COMMENT: "#" /[^\n]/*
+%ignore COMMENT
+%ignore " "
