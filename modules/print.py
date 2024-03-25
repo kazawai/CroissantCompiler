@@ -9,4 +9,4 @@ class Print(Enum):
         used to define how print operations are defined
     """
 
-    PRINT = Wrapper(lambda args: print(f"Print: {args[-1]}"))
+    PRINT = Wrapper(lambda args: print(f"Print: {args[1]}"))

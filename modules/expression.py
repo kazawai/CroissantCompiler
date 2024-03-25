@@ -19,3 +19,4 @@ class Expression(Enum):
     INTEGER = Wrapper(integer_atomic_value)
     STRING = Wrapper(StringExpression)
     BOOLEAN = Wrapper(BooleanExpr)
+    ARITHMETIC_OP = Wrapper(lambda args: args[0])

@@ -4,6 +4,8 @@ from modules.wrapper import Wrapper
 
 
 def int_atomic_value(args):
+    if isinstance(args, list):
+        args = args[0]
     return int(args)
 
 
@@ -27,7 +29,7 @@ class ArithmeticExpression(Enum):
     SUBTRACTION = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x - y))
     MULTIPLICATION = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x * y))
     DIVISION = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x / y))
-    EQUAL = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x == y))
+    EQUALS = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x == y))
     NOT_EQUAL = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x != y))
     GREATER = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x > y))
     LESS = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x < y))

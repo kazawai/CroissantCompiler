@@ -23,13 +23,13 @@
     ?loop: "tant" "que" boolean_e "faire" block -> while
         | "pour" "chaque" TYPE IDENTIFIER "dans" expression "faire" block -> for
 
-    ?comparison: expression ("vaut" | "==") expression -> eq
-        | expression ("ne vaut pas" | "!=") expression -> neq
+    ?comparison: expression ("vaut" | "==") expression -> equals
+        | expression ("ne vaut pas" | "!=") expression -> not_equals
 
-    ?arithmetic_op: expression "+" expression -> add
-        | expression "-" expression -> sub
-        | expression "*" expression -> mul
-        | expression "/" expression -> div
+    ?arithmetic_op: expression "+" expression -> addition
+        | expression "-" expression -> subtraction
+        | expression "*" expression -> multiplication
+        | expression "/" expression -> division
 
     ?boolean_e: boolean ("et" | "ou") boolean -> and_or
 

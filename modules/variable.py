@@ -31,6 +31,11 @@ class Variable:
       taille en mémoire -> {getsizeof(self)} octets\n
       global_context -> {global_context}"""
 
+    def __add__(self, other):
+        if isinstance(other, Variable):
+            return VariableExpression.VARIABLE.value(other.label).value + self.value
+        return self.value + other
+
     @staticmethod
     def instanciation(args):
         var = Variable(args[1], args[0], args[2])
@@ -47,4 +52,4 @@ class Variable:
 class VariableExpression(Enum):
     DECLARATION = Wrapper(Variable.declaration)
     INITIALIZATION = Wrapper(Variable.instanciation)
-    VARIABLE = Wrapper(lambda args: args[1].find(args[0]).value)
+    VARIABLE = Wrapper(lambda args: global_context[args])
