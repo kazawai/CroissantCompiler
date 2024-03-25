@@ -1,36 +1,55 @@
 ?start: statement+
 
-    ?statement: assigment ";" -> assigment
-        | expression ";" -> expression
+    ?statement: assignment DELIMITER -> assignment
+        | condition DELIMITER -> condition
+        | loop DELIMITER -> loop
+        | expression DELIMITER -> expression
+        | PRINT expression DELIMITER -> print
         
-        
-    ?assigment: KEYWORDS IDENTIFIER -> declaration
-        | KEYWORDS IDENTIFIER "=" expression  -> instanciation
+    ?assignment: TYPE IDENTIFIER "=" expression -> initialization
+        | TYPE IDENTIFIER -> declaration
 
-    ?expression: boolean_e -> boolean_exp
-        | arithmetic_e -> arithmetic_exp
-        | string_e -> string_exp
-        | list_e -> list_exp
+    ?expression: arithmetic_op -> arithmetic_op
+        | comparison -> comparison
+        | variable -> variable
+        | TEXT_VALUE -> string
+        | INTEGER_VALUE -> integer
+        | BOOLEAN_VALUE -> boolean 
 
-    ?boolean_e: BOOLEAN_VALUE -> atomic_value
-        | "non" boolean_e -> negation
-        | boolean_e "et" boolean_e -> conjonct
-        | boolean_e "ou" boolean_e -> disjonct
+    ?block: "{" statement* "}"
 
-    ?list_e: "[]" -> atomic_value
+    ?condition: "si" boolean_e "alors" block ("sinon" block)? -> if_else
 
-    ?arithmetic_e: INTEGER_VALUE -> atomic_value
+    ?loop: "tant" "que" boolean_e "faire" block -> while
+        | "pour" "chaque" TYPE IDENTIFIER "dans" expression "faire" block -> for
 
-    ?string_e: TEXT_VALUE -> atomic_value
+    ?comparison: expression ("vaut" | "==") expression -> equals
+        | expression ("ne vaut pas" | "!=") expression -> not_equals
 
-KEYWORDS: /texte|entier|liste|booléen/
+    ?arithmetic_op: expression "+" expression -> addition
+        | expression "-" expression -> subtraction
+        | expression "*" expression -> multiplication
+        | expression "/" expression -> division
+
+    ?boolean_e: boolean ("et" | "ou") boolean -> and_or
+
+    ?boolean: expression ("<" | ">" | "<=" | ">=") expression -> comparison
+        | "non" boolean -> not
+
+    ?variable: IDENTIFIER
+
+
+// Tokens (type has a priority over identifier)
+TYPE.1: /entier|texte|liste|booléen/
+
+PRINT: "afficher"
 
 IDENTIFIER: /[_a-zA-Zé][\wé_]*/
 TEXT_VALUE: /".*"/
 INTEGER_VALUE: /(-)?[1-9][0-9]*/
 BOOLEAN_VALUE: /faux|vrai/
 
-DELIMITER: /";"|"{"|"}"/ 
+DELIMITER: ";"
 
 COMMENT: "#" /[^\n]/*
 %ignore COMMENT 

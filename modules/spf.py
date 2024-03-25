@@ -1,4 +1,5 @@
 from sys import argv
+
 import lark
 from lark import Lark, Transformer
 from statement import Statement
@@ -18,7 +19,6 @@ class Interpretor(Transformer):
             return args[0].value
         else:
             return [self.interpret(node) for node in args]
-
 
 
 if __name__ == "__main__":
