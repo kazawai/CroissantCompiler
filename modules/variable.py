@@ -8,6 +8,9 @@ from modules.wrapper import Wrapper
 
 TYPES = {"booléen": booléen, "entier": entier, "texte": texte}
 
+global global_context
+global_context = {}
+
 
 class Variable:
 
@@ -17,24 +20,27 @@ class Variable:
         self.label = label
         self.type = type
         self.value = value
+        global_context[label] = self
+        print(f"Contexte global : {global_context}")
 
     def __str__(self):
         return f"""objet variable : \n
       label -> {self.label} \n
       type -> {self.type}\n
       valeur -> {self.value}\n
-      taille en mémoire -> {getsizeof(self)} octets"""
+      taille en mémoire -> {getsizeof(self)} octets\n
+      global_context -> {global_context}"""
 
     @staticmethod
     def instanciation(args):
         var = Variable(args[1], args[0], args[2])
-        args[3].update({args[1]: var})
+        print(var)
         return var
 
     @staticmethod
     def declaration(args):
         var = Variable(args[1], args[0], None)
-        args[2].update({args[1]: var})
+        print(var)
         return var
 
 
