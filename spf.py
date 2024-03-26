@@ -10,6 +10,7 @@ class Interpreter(Transformer):
 
     @v_args()
     def interpret(self, args, statement_type=Statement()):
+        print(args)
         if isinstance(args, Tree):
             type = args.data.upper()
             return statement_type[type](self.interpret(args.children))

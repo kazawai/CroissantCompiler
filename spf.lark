@@ -13,6 +13,7 @@
         | arithmetic_op
         | string_e
         | boolean_e
+        | list_e
         | variable
 
     ?block: "{" statement* "}"
@@ -42,6 +43,15 @@
         | "taille" string_e -> size
         | string_e "[" arithmetic_op "]" -> index
 
+    ?list_e:  "[]" -> list_bc //basis case
+        | "[" sequence "]" -> list_gc //general case
+        | "[" arithmetic_op ":" arithmetic_op "]" -> range_list
+        | list_e "+" list_e -> concat_list
+        | list_e "["arithmetic_op"]" -> index_list
+        | "taille" list_e -> size_list
+
+    ?sequence: expression
+        | expression "," sequence
 
   //  ?boolean: expression ("<" | ">" | "<=" | ">=") expression -> comparison
   //      | "non" boolean -> not

@@ -12,10 +12,8 @@ def concat(args):
 def size(args):
     return len(args)
 
-
 def index(args):
     return args[0][args[1]]
-
 
 class StringExpression(Enum):
     """

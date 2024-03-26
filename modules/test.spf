@@ -9,3 +9,7 @@ non vrai et faux;
 "test";
 "test"[0];
 "U" + " Sussy";
+[];
+[1:3];
+[0, 1, 1];
+[1, 2][0];
