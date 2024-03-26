@@ -27,8 +27,18 @@ if __name__ == "__main__":
         parser = Lark(
             grammar, start="statement", parser="lalr", transformer=interpreter
         )
+        """
         while True:
             tree = parser.parse(input(">"))
             result = interpreter.interpret(tree)
             print(result)
             print(global_context)
+        """
+        with open("modules/test.spf", "r") as file:
+            for line in file:
+                print("----------------------------------")
+                print(f"TEST : " + line)
+                tree = parser.parse(line)
+                result = interpreter.interpret(tree)
+                print(result)
+                print(global_context)

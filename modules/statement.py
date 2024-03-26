@@ -1,7 +1,7 @@
-from modules.assignment import Assignment
+from modules.booléen import BooleanExpression
 from modules.entier import ArithmeticExpression
-from modules.expression import Expression
 from modules.print import Print
+from modules.texte import StringExpression
 from modules.variable import VariableExpression as Variable
 
 
@@ -10,10 +10,10 @@ class Statement:
     def __init__(self):
         self.enum_classes = [
             Print,
-            Expression,
             Variable,
-            Assignment,
             ArithmeticExpression,
+            BooleanExpression,
+            StringExpression
         ]
 
     def __getitem__(self, key):

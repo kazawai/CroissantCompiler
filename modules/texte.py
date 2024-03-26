@@ -4,19 +4,17 @@ from modules.wrapper import Wrapper
 
 
 def string_atomic_value(args):
-    return args
-
+    return args[1:len(args) - 1]
 
 def concat(args):
     return args[0] + args[1]
-
 
 def size(args):
     return len(args)
 
 
 def index(args):
-    return args[0][int(args[1])]
+    return args[0][args[1]]
 
 
 class StringExpression(Enum):

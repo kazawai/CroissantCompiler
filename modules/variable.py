@@ -7,6 +7,7 @@ import modules.texte as texte
 from modules.wrapper import Wrapper
 
 TYPES = {"booléen": booléen, "entier": entier, "texte": texte}
+KEYWORDS = list(TYPES.keys()) + ["faux", "vrai", "while", "for"]
 
 global global_context
 global_context = {}
@@ -17,11 +18,12 @@ class Variable:
     def __init__(self, label, type, value):
         if not type in TYPES.keys():
             raise Exception(f"unknown type {type}")
+        if label in KEYWORDS:
+            raise Exception(f"cannot assign keyword as label")
         self.label = label
         self.type = type
         self.value = value
         global_context[label] = self
-        print(f"Contexte global : {global_context}")
 
     def __str__(self):
         return f"""objet variable : \n
@@ -39,13 +41,11 @@ class Variable:
     @staticmethod
     def instanciation(args):
         var = Variable(args[1], args[0], args[2])
-        print(var)
         return var
 
     @staticmethod
     def declaration(args):
         var = Variable(args[1], args[0], None)
-        print(var)
         return var
 
 

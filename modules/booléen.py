@@ -13,8 +13,8 @@ def bool_atomic_value(args):
             raise Exception(f"the atomic value <{args}> of boolean is not defined ")
 
 
-def negation(args):
-    return not args
+def bool_negation(args):
+    return not args[0]
 
 
 def conjunction(args):
@@ -25,13 +25,13 @@ def disjunction(args):
     return args[0] or args[1]
 
 
-class BooleanExpr(Enum):
+class BooleanExpression(Enum):
     """
     Boolean Expr:
         used to define how operations are defined on boolean values
     """
 
-    BOOLEAN_ATOMIC_VALUE = Wrapper(bool_atomic_value)
-    NEGATION = Wrapper(negation)
+    BOOL_ATOMIC_VALUE = Wrapper(bool_atomic_value)
+    BOOL_NEGATION = Wrapper(bool_negation)
     CONJUNCTION = Wrapper(conjunction)
     DISJUNCTION = Wrapper(disjunction)

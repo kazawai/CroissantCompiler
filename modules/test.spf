@@ -1,1 +1,11 @@
 entier var = 10;
+entier var = 10 + 10 * 2;
+10 / 10;
+faux;
+vrai;
+faux et vrai;
+vrai et vrai;
+non vrai et faux;
+"test";
+"test"[0];
+"U" + " Sussy";
