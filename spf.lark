@@ -50,8 +50,7 @@
         | list_e "["arithmetic_op"]" -> index_list
         | "taille" list_e -> size_list
 
-    ?sequence: expression
-        | expression "," sequence
+    ?sequence: expression ("," expression)*
 
   //  ?boolean: expression ("<" | ">" | "<=" | ">=") expression -> comparison
   //      | "non" boolean -> not
