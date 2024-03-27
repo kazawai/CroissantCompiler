@@ -8,7 +8,9 @@ def list_bc(args):
 
 
 def list_gc(args):
-    return list(args[0])
+    if len(args) > 1:
+        return list(args[0])
+    return args[0]
 
 
 def concat_list(args):
@@ -26,6 +28,10 @@ def size_list(args):
 def range_list(args):
     return list(range(args[0], args[1]))
 
+def add(args):
+    if type(args[1]) != list:
+        args[1] = [args[1]]
+    return args[1] + [args[0]]
 
 class ListExpression(Enum):
     LIST_BC = Wrapper(list_bc)
@@ -35,3 +41,4 @@ class ListExpression(Enum):
     SIZE_LIST = Wrapper(size_list)
     RANGE_LIST = Wrapper(range_list)
     SEQUENCE = Wrapper(lambda args: list(args))
+    ADD = Wrapper(add)

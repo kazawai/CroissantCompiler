@@ -10,7 +10,7 @@ def concat(args):
     return args[0] + args[1]
 
 def size(args):
-    return len(args)
+    return len(args[0])
 
 def index(args):
     return args[0][args[1]]
