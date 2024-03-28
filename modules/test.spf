@@ -25,7 +25,7 @@ taille [0, 1, 1];
 [1, 2][0];
 [1,2,[3,4]];
 entier x = 3;
-x < 4;
+booléen z = x < 4;
 ajouter 2 dans [1];
 ajouter 3 dans [1, 2];
 ajouter [3, 4] dans [1, 2];

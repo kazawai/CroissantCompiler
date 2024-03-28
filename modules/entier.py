@@ -11,7 +11,7 @@ def int_atomic_value(args):
 
 def int_negation(args):
     print(args)
-    return - args[0]
+    return -args[0]
 
 
 def arithmetic_op(args, operation):
@@ -32,7 +32,3 @@ class ArithmeticExpression(Enum):
     DIVISION = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x // y))
     EQUALS = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x == y))
     NOT_EQUAL = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x != y))
-    GREATER = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x > y))
-    LESS = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x < y))
-    GREATER_EQUAL = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x >= y))
-    LESS_EQUAL = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x <= y))
