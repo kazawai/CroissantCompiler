@@ -24,7 +24,13 @@
         | "pour" "chaque" TYPE IDENTIFIER "dans" expression "faire" block -> for
 
     ?comparison: expression ("vaut" | "==") expression -> equals
-        | expression ("ne vaut pas" | "!=") expression -> not_equals
+        | expression ("ne vaut pas" | "!=") expression -> not_equal
+        | arithmetic_op "<=" arithmetic_op -> less_equal
+        | arithmetic_op ">=" arithmetic_op -> greater_equal
+        | arithmetic_op "<" arithmetic_op -> less
+        | arithmetic_op ">" arithmetic_op -> greater
+
+
 
     ?arithmetic_op: INTEGER_VALUE -> int_atomic_value
         | "-" arithmetic_op -> int_negation
@@ -49,6 +55,7 @@
         | list_e "+" list_e -> concat_list
         | list_e "["arithmetic_op"]" -> index_list
         | "taille" list_e -> size_list
+        | "ajouter" expression "dans" list_e -> add
 
     ?sequence: expression ("," expression)*
 

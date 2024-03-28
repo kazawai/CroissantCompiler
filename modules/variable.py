@@ -26,12 +26,11 @@ class Variable:
         global_context[label] = self
 
     def __str__(self):
-        return f"""objet variable : \n
-      label -> {self.label} \n
-      type -> {self.type}\n
-      valeur -> {self.value}\n
-      taille en mémoire -> {getsizeof(self)} octets\n
-      global_context -> {global_context}"""
+        if self.value == True:
+            return f"{self.type} {self.label} = vrai"
+        if self.value == False:
+            return f"{self.type} {self.label} = faux"
+        return f"{self.type} {self.label} = {self.value}"
 
     def __add__(self, other):
         if isinstance(other, Variable):

@@ -1,4 +1,5 @@
 from modules.booléen import BooleanExpression
+from modules.comparison import ComparisonExpression
 from modules.entier import ArithmeticExpression
 from modules.liste import ListExpression
 from modules.print import Print
@@ -15,7 +16,8 @@ class Statement:
             ArithmeticExpression,
             BooleanExpression,
             StringExpression,
-            ListExpression
+            ListExpression,
+            ComparisonExpression
         ]
 
     def __getitem__(self, key):
