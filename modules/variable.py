@@ -1,12 +1,9 @@
 from enum import Enum
 from sys import getsizeof
 
-import modules.booléen as booléen
-import modules.entier as entier
-import modules.texte as texte
 from modules.wrapper import Wrapper
 
-TYPES = {"booléen": booléen, "entier": entier, "texte": texte}
+TYPES = {"booléen": bool, "entier": int, "texte": str, "liste": list}
 KEYWORDS = list(TYPES.keys()) + ["faux", "vrai", "while", "for"]
 
 global global_context

@@ -30,14 +30,12 @@
         | expression "<" expression -> less
         | expression ">" expression -> greater
 
-
-
     ?arithmetic_op: INTEGER_VALUE -> int_atomic_value
-        | "-" arithmetic_op -> int_negation
-        | arithmetic_op "+" arithmetic_op -> addition
-        | arithmetic_op "-" arithmetic_op -> subtraction
-        | arithmetic_op "*" arithmetic_op -> multiplication
-        | arithmetic_op "/" arithmetic_op -> division
+        | "-" expression -> int_negation
+        | expression "+" expression -> addition
+        | expression "-" expression -> subtraction
+        | expression "*" expression -> multiplication
+        | expression "/" expression -> division
 
     ?boolean_e: BOOLEAN_VALUE -> bool_atomic_value
         | "non" boolean_e -> bool_negation

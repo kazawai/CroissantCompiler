@@ -1,5 +1,6 @@
 from enum import Enum
 
+from modules.variable import global_context
 from modules.wrapper import Wrapper
 
 
@@ -14,7 +15,14 @@ def int_negation(args):
     return -args[0]
 
 
+def get_var_value(var):
+    if var in global_context:
+        return global_context[var].value
+    return var
+
+
 def arithmetic_op(args, operation):
+    args = [get_var_value(arg) for arg in args]
     return operation(args[0], args[1])
 
 

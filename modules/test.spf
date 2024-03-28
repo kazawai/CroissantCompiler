@@ -29,3 +29,5 @@ booléen z = x < 4;
 ajouter 2 dans [1];
 ajouter 3 dans [1, 2];
 ajouter [3, 4] dans [1, 2];
+entier a = 3;
+entier a = a + 1;
