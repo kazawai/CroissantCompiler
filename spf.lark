@@ -1,4 +1,4 @@
-?start: statement+ -> interpret
+?start: statement* -> interpret
 
     ?statement: assignment ";"
         | condition ";" -> condition
@@ -75,6 +75,7 @@ BOOLEAN_VALUE.1: /faux|vrai/
 
 DELIMITER: ";"
 
-%ignore "#"
+COMMENT: /^#.*\n$/
+%ignore COMMENT
 %ignore "\n"
 %ignore " "
