@@ -12,7 +12,7 @@ class SPFException(Exception):
     def __init__(self, message="error occured from the spf program"):
         self.line_counter = global_var.line_counter
         self.message = message
-        super().__init__(self.message + f" at line {self.line_counter}")
+        super().__init__("ERROR: " +self.message + f" at line {self.line_counter}")
 
 
 class SPFSyntaxError(SPFException, UnexpectedInput):

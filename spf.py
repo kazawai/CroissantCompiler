@@ -1,4 +1,4 @@
-from sys import argv
+from sys import argv, stderr
 
 from lark import Lark, Token, Transformer, Tree, v_args
 from lark.exceptions import UnexpectedInput
@@ -22,9 +22,8 @@ class Interpreter(Transformer):
              return [self.interpret(node) for node in args]
 
 def memory():
-    print("------MEMOIRE---------")
     for variable in global_var.context.keys():
-        print(global_var.context[variable])
+        print(f"MEM: {global_var.context[variable]}", file=stderr)
 
 
 if __name__ == "__main__":
@@ -43,11 +42,10 @@ if __name__ == "__main__":
             print(context)
         """ 
         if "--debug" in argv[1:] or "-d" in argv[1:]:
-            debug = True
+            print("je passe")
+            global_var.debug = True
         with open("sample/test.spf", "r") as file:
             for line in file:
-                print("----------------------------------")
-                print(f"TEST : " + line)
                 try:
                     try:
                         tree = parser.parse(line)
@@ -56,7 +54,7 @@ if __name__ == "__main__":
                         raise SPFSyntaxError()
                 except SPFException as e:
                     print(e)
-                    break
+                    #break
                 global_var.line_counter += 1
         if "--memory" in argv[1:] or "-m" in argv[1:]:
             memory()

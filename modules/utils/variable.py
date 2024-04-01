@@ -2,6 +2,7 @@ from enum import Enum
 from modules.utils import global_var
 from modules.exceptions.exception import SPFUnknowVariable, SPFUninitializedVariable, SPFAlreadyDefined, SPFIncompatibleType
 from modules.utils.wrapper import Wrapper
+import sys
 
 TYPES = {"booléen": bool, "entier": int, "texte": str, "liste": list}
 KEYWORDS = list(TYPES.keys()) + ["faux", "vrai", "while", "for"]
@@ -11,9 +12,9 @@ class Variable:
     def __init__(self, label, type_, value=None):
         if global_var.debug:
             if value == None:
-                print(f"{global_var.line_counter} : déclare {type_} {label} = vide")
+                print(f"DEBUG: ligne {global_var.line_counter} : déclare {type_} {label} = vide", file=sys.stderr)
             else:
-                print(f"{global_var.line_counter} : déclare {type_} {label} = {value}")
+                print(f"DEBUG: ligne {global_var.line_counter} : déclare {type_} {label} = {value}", file=sys.stderr)
         if label in global_var.context.keys():
             raise SPFAlreadyDefined(label)
         if value != None and TYPES[type_] != type(value):
@@ -49,7 +50,9 @@ class Variable:
     def call(args):
         try:
             if global_var.context[args].value != None:
-                return global_var.context[args].value
+                var = global_var.context[args[0]]
+                print(f"DEBUG: ligne {global_var.line_counter} : accède {var.type} {var.label} = {var.value}", file=sys.stderr)
+                return var.value
             raise SPFUninitializedVariable(args)
         except KeyError:
             raise SPFUnknowVariable(args)
@@ -58,6 +61,8 @@ class Variable:
     def modification(args):
         try:
             global_var.context[args[0]].value = args[1]
+            var = global_var.context[args[0]]
+            print(f"DEBUG: ligne {global_var.line_counter} : modifie {var.type} {var.label} = {var.value}", file=sys.stderr)
         except KeyError:
             raise SPFUnknowVariable(args)
 
