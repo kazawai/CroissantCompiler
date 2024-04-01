@@ -9,6 +9,11 @@ KEYWORDS = list(TYPES.keys()) + ["faux", "vrai", "while", "for"]
 class Variable:
 
     def __init__(self, label, type_, value=None):
+        if global_var.debug:
+            if value == None:
+                print(f"{global_var.line_counter} : déclare {type_} {label} = vide")
+            else:
+                print(f"{global_var.line_counter} : déclare {type_} {label} = {value}")
         if label in global_var.context.keys():
             raise SPFAlreadyDefined(label)
         if value != None and TYPES[type_] != type(value):
@@ -48,9 +53,17 @@ class Variable:
             raise SPFUninitializedVariable(args)
         except KeyError:
             raise SPFUnknowVariable(args)
+    
+    @staticmethod
+    def modification(args):
+        try:
+            global_var.context[args[0]].value = args[1]
+        except KeyError:
+            raise SPFUnknowVariable(args)
 
 
 class VariableExpression(Enum):
     DECLARATION = Wrapper(Variable.declaration)
     INITIALIZATION = Wrapper(Variable.instanciation)
     CALL = Wrapper(Variable.call)
+    MODIFICATION = Wrapper(Variable.modification)

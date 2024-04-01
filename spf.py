@@ -6,7 +6,6 @@ from modules.types.statement import Statement
 from modules.utils import global_var
 from modules.exceptions.exception import SPFException, SPFSyntaxError
 
-debug = False
 
 class Interpreter(Transformer):
 
@@ -57,6 +56,7 @@ if __name__ == "__main__":
                         raise SPFSyntaxError()
                 except SPFException as e:
                     print(e)
+                    break
                 global_var.line_counter += 1
         if "--memory" in argv[1:] or "-m" in argv[1:]:
             memory()

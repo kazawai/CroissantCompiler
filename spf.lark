@@ -8,6 +8,7 @@
 
     ?assignment: TYPE IDENTIFIER "=" expression -> initialization
         | TYPE IDENTIFIER -> declaration
+        | IDENTIFIER "=" expression -> modification
 
     ?expression: comparison
         | arithmetic_op

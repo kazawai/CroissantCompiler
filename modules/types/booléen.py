@@ -2,6 +2,7 @@ from enum import Enum
 
 from modules.utils.wrapper import Wrapper
 
+VALUES = {"faux" : False, "vrai" : True, False : "faux", True : "vrai"}
 
 def bool_atomic_value(args):
     match args:
