@@ -1,10 +1,10 @@
-from modules.booléen import BooleanExpression
-from modules.comparison import ComparisonExpression
-from modules.entier import ArithmeticExpression
-from modules.liste import ListExpression
-from modules.print import Print
-from modules.texte import StringExpression
-from modules.variable import VariableExpression as Variable
+from modules.types.booléen import BooleanExpression
+from modules.types.comparison import ComparisonExpression
+from modules.types.entier import ArithmeticExpression
+from modules.types.liste import ListExpression
+from modules.types.print import Print
+from modules.types.texte import StringExpression
+from modules.utils.variable import VariableExpression as Variable
 
 
 class Statement:

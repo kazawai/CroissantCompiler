@@ -1,5 +1,5 @@
 entier var = 10;
-entier var = 10 + 10 * 2;
+entier var1 = 10 + 10 * 2;
 10 / 10;
 10 < 11;
 11 < 10;
@@ -30,4 +30,12 @@ ajouter 2 dans [1];
 ajouter 3 dans [1, 2];
 ajouter [3, 4] dans [1, 2];
 entier a = 3;
-entier a = a + 1;
+SUS
+entier a1 = a + 1;
+entier a1 = 5;
+booléen var2 = 2;
+entier b = a2 + 1;
+[][1];
+entier variable;
+variable + 2;
+

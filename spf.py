@@ -1,9 +1,10 @@
-from sys import platlibdir, argv
+from sys import argv
 
 from lark import Lark, Token, Transformer, Tree, v_args
-
-from modules.statement import Statement
-from modules.variable import global_context
+from lark.exceptions import UnexpectedInput
+from modules.types.statement import Statement
+from modules.utils import global_var
+from modules.exceptions.exception import SPFException, SPFSyntaxError
 
 debug = False
 
@@ -19,15 +20,16 @@ class Interpreter(Transformer):
         elif len(args) == 1 and isinstance(args[0], Token):
             return args[0].value
         else:
-            return [self.interpret(node) for node in args]
-        
+             return [self.interpret(node) for node in args]
+
 def memory():
     print("------MEMOIRE---------")
-    for variable in global_context.keys():
-        print(global_context[variable])
+    for variable in global_var.context.keys():
+        print(global_var.context[variable])
 
 
 if __name__ == "__main__":
+    global_var.init()
     print(argv)
     with open("spf.lark", "r") as grammar:
         interpreter = Interpreter()
@@ -39,15 +41,22 @@ if __name__ == "__main__":
             tree = parser.parse(input(">"))
             result = interpreter.interpret(tree)
             print(result)
-            print(global_context)
+            print(context)
         """ 
         if "--debug" in argv[1:] or "-d" in argv[1:]:
             debug = True
-        with open("modules/test.spf", "r") as file:
+        with open("sample/test.spf", "r") as file:
             for line in file:
                 print("----------------------------------")
                 print(f"TEST : " + line)
-                tree = parser.parse(line)
-                result = interpreter.interpret(tree)
+                try:
+                    try:
+                        tree = parser.parse(line)
+                        result = interpreter.interpret(tree)
+                    except UnexpectedInput:
+                        raise SPFSyntaxError()
+                except SPFException as e:
+                    print(e)
+                global_var.line_counter += 1
         if "--memory" in argv[1:] or "-m" in argv[1:]:
             memory()

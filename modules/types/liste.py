@@ -1,6 +1,7 @@
 from enum import Enum
 
-from modules.wrapper import Wrapper
+from modules.utils.wrapper import Wrapper
+from modules.exceptions.exception import SPFIndexError
 
 
 def list_bc(args):
@@ -18,6 +19,8 @@ def concat_list(args):
 
 
 def index_list(args):
+    if args[1] < 0 or args[1] >= len(args[0]):
+        raise SPFIndexError(args[1], len(args[0]))
     return args[0][args[1]]
 
 

@@ -1,6 +1,6 @@
 from enum import Enum
 
-from modules.wrapper import Wrapper
+from modules.utils.wrapper import Wrapper
 
 
 class Print(Enum):

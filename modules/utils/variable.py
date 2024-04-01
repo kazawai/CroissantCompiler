@@ -1,26 +1,22 @@
 from enum import Enum
-from sys import getsizeof
-
-from modules.wrapper import Wrapper
+from modules.utils import global_var
+from modules.exceptions.exception import SPFUnknowVariable, SPFUninitializedVariable, SPFAlreadyDefined, SPFIncompatibleType
+from modules.utils.wrapper import Wrapper
 
 TYPES = {"booléen": bool, "entier": int, "texte": str, "liste": list}
 KEYWORDS = list(TYPES.keys()) + ["faux", "vrai", "while", "for"]
 
-global global_context
-global_context = {}
-
-
 class Variable:
 
-    def __init__(self, label, type, value):
-        if not type in TYPES.keys():
-            raise Exception(f"unknown type {type}")
-        if label in KEYWORDS:
-            raise Exception(f"cannot assign keyword as label")
+    def __init__(self, label, type_, value=None):
+        if label in global_var.context.keys():
+            raise SPFAlreadyDefined(label)
+        if value != None and TYPES[type_] != type(value):
+            raise SPFIncompatibleType(label, type_, value)
         self.label = label
-        self.type = type
+        self.type = type_
         self.value = value
-        global_context[label] = self
+        global_var.context[label] = self
 
     def __str__(self):
         if self.value == True:
@@ -43,9 +39,18 @@ class Variable:
     def declaration(args):
         var = Variable(args[1], args[0], None)
         return var
+    
+    @staticmethod
+    def call(args):
+        try:
+            if global_var.context[args].value != None:
+                return global_var.context[args].value
+            raise SPFUninitializedVariable(args)
+        except KeyError:
+            raise SPFUnknowVariable(args)
 
 
 class VariableExpression(Enum):
     DECLARATION = Wrapper(Variable.declaration)
     INITIALIZATION = Wrapper(Variable.instanciation)
-    VARIABLE = Wrapper(lambda args: global_context[args])
+    CALL = Wrapper(Variable.call)

@@ -1,6 +1,7 @@
 from enum import Enum
 
-from modules.wrapper import Wrapper
+from modules.utils.wrapper import Wrapper
+from modules.exceptions.exception import SPFIndexError
 
 
 def string_atomic_value(args):
@@ -13,6 +14,8 @@ def size(args):
     return len(args[0])
 
 def index(args):
+    if args[1] < 0 or args[1] >= len(args[0]):
+        raise SPFIndexError(args[1], len(args[0]))
     return args[0][args[1]]
 
 class StringExpression(Enum):

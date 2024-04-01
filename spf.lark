@@ -60,7 +60,7 @@
   //  ?boolean: expression ("<" | ">" | "<=" | ">=") expression -> comparison
   //      | "non" boolean -> not
 
-    ?variable: IDENTIFIER
+    ?variable: IDENTIFIER -> call
 
 
 // Tokens (type has a priority over identifier)
@@ -74,8 +74,9 @@ INTEGER_VALUE.1: /(0)|((-)?[1-9][0-9]*)/
 BOOLEAN_VALUE.1: /faux|vrai/
 
 DELIMITER: ";"
-
 COMMENT: /^#.*\n$/
-%ignore COMMENT
+
+
 %ignore "\n"
+%ignore COMMENT
 %ignore " "
