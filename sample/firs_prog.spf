@@ -1,0 +1,4 @@
+entier var = 10;
+afficher var + 20;
+var = 10 + 30;
+afficher var;

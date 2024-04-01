@@ -1,20 +1,21 @@
-?start: statement+
+?start: statement* -> interpret
 
-    ?statement: assignment DELIMITER -> assignment
-        | condition DELIMITER -> condition
-        | loop DELIMITER -> loop
-        | expression DELIMITER -> expression
-        | PRINT expression DELIMITER -> print
-        
+    ?statement: assignment ";"
+        | condition ";" -> condition
+        | loop ";" -> loop
+        | expression ";"
+        | PRINT expression ";" -> print
+
     ?assignment: TYPE IDENTIFIER "=" expression -> initialization
         | TYPE IDENTIFIER -> declaration
+        | IDENTIFIER "=" expression -> modification
 
-    ?expression: arithmetic_op -> arithmetic_op
-        | comparison -> comparison
-        | variable -> variable
-        | TEXT_VALUE -> string
-        | INTEGER_VALUE -> integer
-        | BOOLEAN_VALUE -> boolean 
+    ?expression: comparison
+        | arithmetic_op
+        | string_e
+        | boolean_e
+        | list_e
+        | variable
 
     ?block: "{" statement* "}"
 
@@ -24,19 +25,43 @@
         | "pour" "chaque" TYPE IDENTIFIER "dans" expression "faire" block -> for
 
     ?comparison: expression ("vaut" | "==") expression -> equals
-        | expression ("ne vaut pas" | "!=") expression -> not_equals
+        | expression ("ne vaut pas" | "!=") expression -> not_equal
+        | expression "<=" expression -> less_equal
+        | expression ">=" expression -> greater_equal
+        | expression "<" expression -> less
+        | expression ">" expression -> greater
 
-    ?arithmetic_op: expression "+" expression -> addition
+    ?arithmetic_op: INTEGER_VALUE -> int_atomic_value
+        | "-" expression -> int_negation
+        | expression "+" expression -> addition
         | expression "-" expression -> subtraction
         | expression "*" expression -> multiplication
         | expression "/" expression -> division
 
-    ?boolean_e: boolean ("et" | "ou") boolean -> and_or
+    ?boolean_e: BOOLEAN_VALUE -> bool_atomic_value
+        | "non" boolean_e -> bool_negation
+        | boolean_e "et" boolean_e -> conjunction
+        | boolean_e "ou" boolean_e -> disjunction
 
-    ?boolean: expression ("<" | ">" | "<=" | ">=") expression -> comparison
-        | "non" boolean -> not
+    ?string_e: TEXT_VALUE -> string_atomic_value
+        | string_e "+" string_e -> concat
+        | "taille" string_e -> size
+        | string_e "[" arithmetic_op "]" -> index
 
-    ?variable: IDENTIFIER
+    ?list_e:  "[]" -> list_bc //basis case
+        | "[" sequence "]" -> list_gc //general case
+        | "[" arithmetic_op ":" arithmetic_op "]" -> range_list
+        | list_e "+" list_e -> concat_list
+        | list_e "["arithmetic_op"]" -> index_list
+        | "taille" list_e -> size_list
+        | "ajouter" expression "dans" list_e -> add
+
+    ?sequence: expression ("," expression)*
+
+  //  ?boolean: expression ("<" | ">" | "<=" | ">=") expression -> comparison
+  //      | "non" boolean -> not
+
+    ?variable: IDENTIFIER -> call
 
 
 // Tokens (type has a priority over identifier)
@@ -45,12 +70,14 @@ TYPE.1: /entier|texte|liste|booléen/
 PRINT: "afficher"
 
 IDENTIFIER: /[_a-zA-Zé][\wé_]*/
-TEXT_VALUE: /".*"/
-INTEGER_VALUE: /(-)?[1-9][0-9]*/
-BOOLEAN_VALUE: /faux|vrai/
+TEXT_VALUE.1: /"[^"]*"/
+INTEGER_VALUE.1: /(0)|((-)?[1-9][0-9]*)/
+BOOLEAN_VALUE.1: /faux|vrai/
 
 DELIMITER: ";"
+COMMENT: /^#.*\n$/
 
-COMMENT: "#" /[^\n]/*
-%ignore COMMENT 
+
+%ignore "\n"
+%ignore COMMENT
 %ignore " "
