@@ -65,13 +65,14 @@ class Variable:
     def modification(args):
         context = global_var.context
         i = 0
-        while i < global_var.nested_counter and args not in context.keys():
+        while i < global_var.nested_counter and not args[0] in context.keys():
             context = context['{'].value
             i += 1
-        context = get_context()
         try:
-            context[args[0]].value = args[1]
             var = context[args[0]]
+            if TYPES[var.type] != type(args[1]):
+                raise SPFIncompatibleType(var.label, var.type, args[1])
+            var.value = args[1]
             if global_var.debug:
                 print(f"DEBUG: ligne {global_var.line_counter} : modifie {var.type} {var.label} = {var.value}", file=sys.stderr)
         except KeyError:

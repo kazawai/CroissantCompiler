@@ -1,7 +1,6 @@
 from lark import Token, Transformer, Tree, v_args
 from modules.types.statement import Statement
-from modules.utils import global_var
-from modules.utils.variable import Block
+from modules.utils.variable import Block, Variable
 
 class Interpreter(Transformer):
 
@@ -38,7 +37,13 @@ class Interpreter(Transformer):
             self.interpret(tree.children[1])
         block.pop()
 
-    def for_(self, args):
+    def for_(self, tree):
         block = Block()
-        print(args)
+        var = self.interpret(tree.children[0])
+        l = self.interpret(tree.children[1])
+        i = 0
+        while i < len(l):
+            Variable.modification([str(var.label), l[i]])
+            self.interpret(tree.children[2])
+            i += 1
         block.pop()

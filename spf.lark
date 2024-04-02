@@ -7,8 +7,10 @@
         | PRINT expression ";" -> print
 
     ?assignment: TYPE IDENTIFIER "=" expression -> initialization
-        | TYPE IDENTIFIER -> declaration
+        | declaration 
         | IDENTIFIER "=" expression -> modification
+
+    ?declaration: TYPE IDENTIFIER -> declaration
 
     ?expression: comparison
         | arithmetic_op
@@ -23,7 +25,7 @@
         | "si" (boolean_e | comparison) "alors" block "sinon" block -> cond_if_else
 
     ?loop: "tant" "que" (boolean_e | comparison) "faire" block -> while
-        | "pour" "chaque" TYPE IDENTIFIER "dans" expression "faire" block -> for
+        | "pour" "chaque" declaration "dans" (string_e|list_e) "faire" block -> for
 
     ?comparison: expression ("vaut" | "==") expression -> equals
         | expression ("ne vaut pas" | "!=") expression -> not_equal
