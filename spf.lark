@@ -2,7 +2,7 @@
 
     ?statement: assignment ";"
         | condition 
-        | loop ";" -> loop
+        | loop
         | expression ";"
         | PRINT expression ";" -> print
 
@@ -22,7 +22,7 @@
     ?condition: "si" (boolean_e | comparison) "alors" block -> cond_if
         | "si" (boolean_e | comparison) "alors" block "sinon" block -> cond_if_else
 
-    ?loop: "tant" "que" boolean_e "faire" block -> while
+    ?loop: "tant" "que" (boolean_e | comparison) "faire" block -> while
         | "pour" "chaque" TYPE IDENTIFIER "dans" expression "faire" block -> for
 
     ?comparison: expression ("vaut" | "==") expression -> equals

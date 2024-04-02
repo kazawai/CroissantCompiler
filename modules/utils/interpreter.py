@@ -11,6 +11,11 @@ class Interpreter(Transformer):
             type = args.data.upper()
             if "COND" in type :
                return self.cond(type, args)
+            elif type == "WHILE":
+                return self.while_(args)
+            elif type == "FOR":
+                return self.for_(args)
+
             return statement_type[type](self.interpret(args.children))
         elif isinstance(args, Token):
             return args.value
@@ -21,12 +26,19 @@ class Interpreter(Transformer):
         
     def cond(self, type, tree):
         block = Block()
-        interpreted = None
         if self.interpret(tree.children[0]):
-            interpreted = self.interpret(tree.children[1])
+            self.interpret(tree.children[1])
         elif "ELSE" in type:
-            interpreted = self.interpret(tree.children[2])
+            self.interpret(tree.children[2])
         block.pop()
-        return interpreted
-    
 
+    def while_(self, tree):
+        block = Block()
+        while self.interpret(tree.children[0]):
+            self.interpret(tree.children[1])
+        block.pop()
+
+    def for_(self, args):
+        block = Block()
+        print(args)
+        block.pop()
