@@ -9,12 +9,12 @@ KEYWORDS = list(TYPES.keys()) + ["faux", "vrai", "while", "for"]
 
 class Variable:
 
-    def __init__(self, label, type_, value=None):
-        if global_var.debug:
+    def __init__(self, label, type_, value=None, debug=True):
+        if debug and global_var.debug:
             if value == None:
-                print(f"DEBUG: ligne {global_var.line_counter} : déclare {type_} {label} = vide", file=sys.stderr)
+                print(f"DEBUG LIGNE {global_var.line_counter} : déclare {type_} {label} = vide", file=sys.stderr)
             else:
-                print(f"DEBUG: ligne {global_var.line_counter} : déclare {type_} {label} = {value}", file=sys.stderr)
+                print(f"DEBUG LIGNE {global_var.line_counter} : déclare {type_} {label} = {value}", file=sys.stderr)
         if label in global_var.context.keys():
             raise SPFAlreadyDefined(label)
         if value != None and TYPES[type_] != type(value):
@@ -55,7 +55,7 @@ class Variable:
             if context[args].value != None:
                 var = context[args]
                 if global_var.debug:
-                    print(f"DEBUG: ligne {global_var.line_counter} : accède {var.type} {var.label} = {var.value}", file=sys.stderr)
+                    print(f"DEBUG LIGNE {global_var.line_counter} : accède {var.type} {var.label} = {var.value}", file=sys.stderr)
                 return var.value
             raise SPFUninitializedVariable(args)
         except KeyError:
@@ -74,7 +74,7 @@ class Variable:
                 raise SPFIncompatibleType(var.label, var.type, args[1])
             var.value = args[1]
             if global_var.debug:
-                print(f"DEBUG: ligne {global_var.line_counter} : modifie {var.type} {var.label} = {var.value}", file=sys.stderr)
+                print(f"DEBUG LIGNE {global_var.line_counter} : modifie {var.type} {var.label} = {var.value}", file=sys.stderr)
         except KeyError:
             raise SPFUnknowVariable(args)     
     
@@ -83,10 +83,14 @@ class Variable:
 class Block(Variable):
 
     def __init__(self):
-        super().__init__('{','{', {})
+        if global_var.debug:
+           print(f"DEBUG LIGNE {global_var.line_counter} : entrée d'un bloc", file=sys.stderr)
+        super().__init__('{','{', {}, False)
         global_var.nested_counter += 1
 
     def pop(self):
+        if global_var.debug:
+           print(f"DEBUG LIGNE {global_var.line_counter} : sortie d'un bloc", file=sys.stderr)
         context = global_var.context
         i = 0
         while i < global_var.nested_counter - 1:
