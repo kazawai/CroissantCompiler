@@ -40,4 +40,6 @@ entier variable;
 variable + 2;
 afficher variable;
 variable = 4;
-
+#CommentaireSansEspace
+# Commentaire avec espace
+afficher variable;

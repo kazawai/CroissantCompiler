@@ -1,9 +1,12 @@
+import traceback
+from os import path
 from sys import argv, stderr
 
-from lark import Lark
+from lark import Lark, UnexpectedInput, UnexpectedToken
 from lark.exceptions import UnexpectedInput
-from modules.utils import global_var
+
 from modules.exceptions.exception import SPFException, SPFSyntaxError
+from modules.utils import global_var
 from modules.utils.interpreter import Interpreter
 
 
@@ -12,35 +15,62 @@ def memory():
         print(f"MEM: {global_var.context[variable]}", file=stderr)
 
 
+def _read(file):
+    if not path.exists(file):
+        raise FileNotFoundError(f"File {file} not found")
+    with open(file, "r") as f:
+        return f.read()
+
+
 if __name__ == "__main__":
     global_var.init()
     print(argv)
-    with open("spf.lark", "r") as grammar:
-        interpreter = Interpreter()
-        parser = Lark(
-            grammar, start="statement", parser="lalr", transformer=interpreter
-        )
-        """
-        while True:
-            tree = parser.parse(input(">"))
-            result = interpreter.interpret(tree)
-            print(result)
-            print(context)
-        """ 
-        if "--debug" in argv[1:] or "-d" in argv[1:]:
-            print("je passe")
-            global_var.debug = True
-        with open("sample/firs_prog.spf", "r") as file:
-            for line in file:
+    try:
+        with open("spf.lark", "r") as grammar:
+            interpreter = Interpreter()
+            parser = Lark(
+                grammar,
+                parser="lalr",
+                transformer=interpreter,
+                propagate_positions=True,
+            )
+            if "--debug" in argv[1:] or "-d" in argv[1:]:
+                print("je passe")
+                global_var.debug = True
+
+            if "--file" in argv[1:] or "-f" in argv[1:]:
+                start = (
+                    argv.index("--file") if "--file" in argv[1:] else argv.index("-f")
+                )
+                file = argv[start + 1]
                 try:
-                    try:
-                        tree = parser.parse(line)
-                        result = interpreter.interpret(tree)
-                    except UnexpectedInput:
-                        raise SPFSyntaxError()
+                    input = _read(file)
+                    tree = parser.parse(input)
+                    result = interpreter.interpret(tree)
                 except SPFException as e:
                     print(e)
-                    #break
-                global_var.line_counter += 1
+                except UnexpectedToken as e:
+                    print(e.get_context(_read(file)))
+                    print(e)
+                    raise SPFSyntaxError()
+            else:
+                while True:
+                    try:
+                        try:
+                            tree = parser.parse(input(">>> "))
+                            result = interpreter.interpret(tree)
+                            print(result)
+                        except UnexpectedInput:
+                            raise SPFSyntaxError()
+                    except SPFException as e:
+                        print(e)
+                    global_var.line_counter += 1
         if "--memory" in argv[1:] or "-m" in argv[1:]:
             memory()
+    except SPFException as e:
+        print(e)
+    except Exception as e:
+        print(e)
+        print("An error occurred, dumping memory")
+        memory()
+        traceback.print_exc()

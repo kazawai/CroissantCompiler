@@ -1,5 +1,3 @@
-
-
 def init():
     global context
     global nested_counter

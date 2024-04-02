@@ -1,10 +1,10 @@
 ?start: statement* -> interpret
 
-    ?statement: assignment ";"
-        | condition 
+    ?statement: assignment DELIMITER
+        | condition
         | loop
-        | expression ";"
-        | PRINT expression ";" -> print
+        | expression DELIMITER
+        | PRINT expression DELIMITER -> print
 
     ?assignment: TYPE IDENTIFIER "=" expression -> initialization
         | declaration 
@@ -78,9 +78,12 @@ INTEGER_VALUE.1: /(0)|((-)?[1-9][0-9]*)/
 BOOLEAN_VALUE.1: /faux|vrai/
 
 DELIMITER: ";"
-COMMENT: /^#.*\n$/
+// Comments are like python comments
+COMMENT: /#[^\n]*/
 
-
-%ignore "\n"
+// Ignore spaces, tabs, newlines and comments
+%ignore /[\t \f]+/  // WS
+%ignore /\\[\t \f]*\r?\n/   // LINE_JOIN
+%ignore /\s+/
 %ignore COMMENT
-%ignore " "
+
