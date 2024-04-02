@@ -1,25 +1,11 @@
 from sys import argv, stderr
 
-from lark import Lark, Token, Transformer, Tree, v_args
+from lark import Lark
 from lark.exceptions import UnexpectedInput
-from modules.types.statement import Statement
 from modules.utils import global_var
 from modules.exceptions.exception import SPFException, SPFSyntaxError
+from modules.utils.interpreter import Interpreter
 
-
-class Interpreter(Transformer):
-
-    @v_args()
-    def interpret(self, args, statement_type=Statement()):
-        if isinstance(args, Tree):
-            type = args.data.upper()
-            return statement_type[type](self.interpret(args.children))
-        elif isinstance(args, Token):
-            return args.value
-        elif len(args) == 1 and isinstance(args[0], Token):
-            return args[0].value
-        else:
-             return [self.interpret(node) for node in args]
 
 def memory():
     for variable in global_var.context.keys():
@@ -44,7 +30,7 @@ if __name__ == "__main__":
         if "--debug" in argv[1:] or "-d" in argv[1:]:
             print("je passe")
             global_var.debug = True
-        with open("sample/test.spf", "r") as file:
+        with open("sample/firs_prog.spf", "r") as file:
             for line in file:
                 try:
                     try:

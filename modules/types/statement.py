@@ -17,7 +17,7 @@ class Statement:
             BooleanExpression,
             StringExpression,
             ListExpression,
-            ComparisonExpression
+            ComparisonExpression        
         ]
 
     def __getitem__(self, key):

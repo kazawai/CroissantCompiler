@@ -1,7 +1,7 @@
 ?start: statement* -> interpret
 
     ?statement: assignment ";"
-        | condition ";" -> condition
+        | condition 
         | loop ";" -> loop
         | expression ";"
         | PRINT expression ";" -> print
@@ -17,9 +17,10 @@
         | list_e
         | variable
 
-    ?block: "{" statement* "}"
+    ?block: "{" statement* "}" -> block
 
-    ?condition: "si" boolean_e "alors" block ("sinon" block)? -> if_else
+    ?condition: "si" (boolean_e | comparison) "alors" block -> cond_if
+        | "si" (boolean_e | comparison) "alors" block "sinon" block -> cond_if_else
 
     ?loop: "tant" "que" boolean_e "faire" block -> while
         | "pour" "chaque" TYPE IDENTIFIER "dans" expression "faire" block -> for

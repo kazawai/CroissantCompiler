@@ -1,4 +1,3 @@
-entier var = 10;
-afficher var + 20;
-var = 10 + 30;
+entier var = 20;
 afficher var;
+si var >= 10 alors { afficher "plus grand ou égal";} sinon {afficher "plus petit";}
