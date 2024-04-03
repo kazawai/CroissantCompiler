@@ -33,6 +33,6 @@ class BooleanExpression(Enum):
     """
 
     BOOL_ATOMIC_VALUE = Wrapper(bool_atomic_value)
-    BOOL_NEGATION = Wrapper(bool_negation)
-    CONJUNCTION = Wrapper(conjunction)
-    DISJUNCTION = Wrapper(disjunction)
+    BOOL_NEGATION = Wrapper(bool_negation, authorized_types={bool:[bool]}, label_op="non")
+    CONJUNCTION = Wrapper(conjunction, authorized_types={bool:[bool]}, label_op="et")
+    DISJUNCTION = Wrapper(disjunction, authorized_types={bool:[bool]}, label_op="ou")

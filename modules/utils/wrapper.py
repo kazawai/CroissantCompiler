@@ -1,7 +1,26 @@
+from modules.exceptions.exception import SPFSyntaxError
+
+
 class Wrapper:
 
-    def __init__(self, f):
+    def __init__(self, f, authorized_types={}, label_op="none"):
         self.f = f
+        self.authorized_types = authorized_types
+        self.label_op = label_op
 
     def __call__(self, *args, **kwargs):
-        return self.f(*args, **kwargs)
+        if len(self.authorized_types.keys()) == 0 or self.authorized_type(*args):
+            return self.f(*args, **kwargs)
+        raise SPFSyntaxError(f"the type {list(map(type, *args))} cannot be used for this operation {self.label_op}")
+    
+    def authorized_type(self, args):
+        key = type(args[0])
+        if key not in self.authorized_types.keys():
+            return False
+        for i in range(1, len(args)):
+            arg = args[i]
+            if len(self.authorized_types[key]) != 0 and type(arg) != self.authorized_types[key][i - 1]:
+                return False
+        return True
+
+            

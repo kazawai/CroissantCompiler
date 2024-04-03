@@ -23,8 +23,4 @@ class StringExpression(Enum):
     String Expr:
         used to define how operations are defined on string values
     """
-
     STRING_ATOMIC_VALUE = Wrapper(string_atomic_value)
-    CONCAT = Wrapper(concat)
-    SIZE = Wrapper(size)
-    INDEX = Wrapper(index)

@@ -19,8 +19,8 @@ class SPFException(Exception):
 
 class SPFSyntaxError(SPFException, UnexpectedInput):
 
-    def __init__(self):
-        super().__init__(message="syntax error")
+    def __init__(self, message=""):
+        super().__init__("syntax error" + message)
 
 
 class SPFUnknowVariable(SPFException):

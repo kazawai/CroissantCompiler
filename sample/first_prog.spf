@@ -1,2 +1,3 @@
 entier i = 0;
 tant que i < 10 faire {afficher i; i = i + 1;}
+afficher 1, 2;

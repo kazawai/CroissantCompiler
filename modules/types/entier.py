@@ -10,11 +10,8 @@ def int_atomic_value(args):
 
 
 def int_negation(args):
-    print(args)
     return -args[0]
 
-def arithmetic_op(args, operation):
-    return operation(args[0], args[1])
 
 class ArithmeticExpression(Enum):
     """
@@ -23,10 +20,9 @@ class ArithmeticExpression(Enum):
     """
 
     INT_ATOMIC_VALUE = Wrapper(int_atomic_value)
-    INT_NEGATION = Wrapper(int_negation)
-    ADDITION = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x + y))
-    SUBTRACTION = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x - y))
-    MULTIPLICATION = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x * y))
-    DIVISION = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x // y))
-    EQUALS = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x == y))
-    NOT_EQUAL = Wrapper(lambda args: arithmetic_op(args, lambda x, y: x != y))
+    
+    INT_NEGATION = Wrapper(lambda arg : arg[0], {int : []}, label_op="-")
+    ADDITION = Wrapper(lambda args:  args[0] + args[1], {int: [int], list:[list], str:[str]}, label_op="+")
+    SUBTRACTION = Wrapper(lambda args: args[0] - args[1], {int : [int]}, label_op="-")
+    MULTIPLICATION = Wrapper(lambda args: args[0] * args[1], {int : [int]}, label_op="*")
+    DIVISION = Wrapper(lambda args: args[0] // args[1], {int : [int]}, label_op="/")

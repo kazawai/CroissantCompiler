@@ -24,7 +24,6 @@ def _read(file):
 
 if __name__ == "__main__":
     global_var.init()
-    print(argv)
     try:
         with open("spf.lark", "r") as grammar:
             interpreter = Interpreter()
@@ -54,12 +53,14 @@ if __name__ == "__main__":
                     print(e)
                     raise SPFSyntaxError()
             else:
-                while True:
+                input_ = input(">>> ")
+                while input_ != "sortir":
                     try:
                         try:
-                            tree = parser.parse(input(">>> "))
+                            tree = parser.parse(input_)
                             result = interpreter.interpret(tree)
                             print(result)
+                            input_ = input(">>> ")
                         except UnexpectedInput:
                             raise SPFSyntaxError()
                     except SPFException as e:

@@ -1,10 +1,10 @@
-?start: statement* -> interpret
+?start: statement* //-> interpret
 
     ?statement: assignment DELIMITER
         | condition
         | loop
         | expression DELIMITER
-        | PRINT expression DELIMITER -> print
+        | display DELIMITER
 
     ?assignment: TYPE IDENTIFIER "=" expression -> initialization
         | declaration 
@@ -42,29 +42,24 @@
         | expression "/" expression -> division
 
     ?boolean_e: BOOLEAN_VALUE -> bool_atomic_value
-        | "non" boolean_e -> bool_negation
-        | boolean_e "et" boolean_e -> conjunction
-        | boolean_e "ou" boolean_e -> disjunction
+        | "non" expression -> bool_negation
+        | expression "et" expression -> conjunction
+        | expression "ou" expression -> disjunction
 
     ?string_e: TEXT_VALUE -> string_atomic_value
-        | string_e "+" string_e -> concat
-        | "taille" string_e -> size
-        | string_e "[" arithmetic_op "]" -> index
 
     ?list_e:  "[]" -> list_bc //basis case
         | "[" sequence "]" -> list_gc //general case
-        | "[" arithmetic_op ":" arithmetic_op "]" -> range_list
-        | list_e "+" list_e -> concat_list
-        | list_e "["arithmetic_op"]" -> index_list
-        | "taille" list_e -> size_list
-        | "ajouter" expression "dans" list_e -> add
+        | "[" expression ":" expression "]" -> range_list
+        | expression "["arithmetic_op"]" -> index_list
+        | "taille" expression -> size_list
+        | "ajouter" expression "dans" expression -> add
 
     ?sequence: expression ("," expression)*
 
-  //  ?boolean: expression ("<" | ">" | "<=" | ">=") expression -> comparison
-  //      | "non" boolean -> not
-
     ?variable: IDENTIFIER -> call
+
+    ?display: PRINT sequence -> print
 
 
 // Tokens (type has a priority over identifier)
