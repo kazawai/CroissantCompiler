@@ -27,6 +27,8 @@ def range_list(args):
 def add(args):
     if type(args[1]) != list:
         args[1] = [args[1]]
+    print(args)
+    print("je passe")
     return args[1] + [args[0]]
 
 class ListExpression(Enum):

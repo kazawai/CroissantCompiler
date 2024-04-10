@@ -1,7 +1,7 @@
 texte phrase = "Bonjour à tout le monde";
 texte mot = "";
 liste mots = [];
-pour chaque texte caractère dans phrase {
+pour chaque texte caractère dans phrase faire {
     si caractère vaut " " alors {
         si taille mot > 0 alors {
             ajouter mot dans mots;

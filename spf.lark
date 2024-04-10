@@ -1,4 +1,4 @@
-?start: statement* //-> interpret
+?start: statement* -> interpret
 
     ?statement: assignment DELIMITER
         | condition
@@ -7,7 +7,7 @@
         | display DELIMITER
 
     ?assignment: TYPE IDENTIFIER "=" expression -> initialization
-        | declaration 
+        | declaration
         | IDENTIFIER "=" expression -> modification
 
     ?declaration: TYPE IDENTIFIER -> declaration
@@ -21,11 +21,11 @@
 
     ?block: "{" statement* "}" -> block
 
-    ?condition: "si" (boolean_e | comparison) "alors" block -> cond_if
-        | "si" (boolean_e | comparison) "alors" block "sinon" block -> cond_if_else
+    ?condition: "si" (boolean_e | comparison | variable) "alors" block -> cond_if
+        | "si" (boolean_e | comparison | variable) "alors" block "sinon" block -> cond_if_else
 
-    ?loop: "tant" "que" (boolean_e | comparison) "faire" block -> while
-        | "pour" "chaque" declaration "dans" (string_e|list_e) "faire" block -> for
+    ?loop: "tant" "que" (boolean_e | comparison | variable) "faire" block -> while
+        | "pour" "chaque" declaration "dans" (string_e|list_e|variable) "faire" block -> for
 
     ?comparison: expression ("vaut" | "==") expression -> equals
         | expression ("ne vaut pas" | "!=") expression -> not_equal
@@ -41,19 +41,23 @@
         | expression "*" expression -> multiplication
         | expression "/" expression -> division
 
-    ?boolean_e: BOOLEAN_VALUE -> bool_atomic_value
-        | "non" expression -> bool_negation
+    ?boolean_e: bool_atomic_value
+        | "non" (bool_atomic_value|variable) -> bool_negation
         | expression "et" expression -> conjunction
         | expression "ou" expression -> disjunction
+        ?bool_atomic_value: BOOLEAN_VALUE -> bool_atomic_value
 
     ?string_e: TEXT_VALUE -> string_atomic_value
 
-    ?list_e:  "[]" -> list_bc //basis case
-        | "[" sequence "]" -> list_gc //general case
-        | "[" expression ":" expression "]" -> range_list
-        | expression "["arithmetic_op"]" -> index_list
-        | "taille" expression -> size_list
+    ?list_e: list_bc //basis case
+        | list_gc //general case
+        | range_list
+        | (list_bc|list_gc|range_list|variable) "["expression"]" -> index_list
+        | "taille" (list_bc|list_gc|range_list|variable) -> size_list
         | "ajouter" expression "dans" expression -> add
+        ?list_bc: "[]" -> list_bc
+        ?list_gc: "[" sequence "]" -> list_gc
+        ?range_list: "[" expression ":" expression "]" -> range_list
 
     ?sequence: expression ("," expression)*
 
@@ -81,4 +85,3 @@ COMMENT: /#[^\n]*/
 %ignore /\\[\t \f]*\r?\n/   // LINE_JOIN
 %ignore /\s+/
 %ignore COMMENT
-

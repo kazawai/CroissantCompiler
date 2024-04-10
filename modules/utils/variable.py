@@ -15,6 +15,7 @@ KEYWORDS = list(TYPES.keys()) + ["faux", "vrai", "while", "for"]
 class Variable:
 
     def __init__(self, label, type_, value=None, debug=True):
+        context = get_context()
         if debug and global_var.debug:
             if value == None:
                 print(
@@ -26,14 +27,14 @@ class Variable:
                     f"DEBUG LIGNE {global_var.line_counter} : déclare {type_} {label} = {value}",
                     file=sys.stderr,
                 )
-        if label in global_var.context.keys():
+        if label in context.keys():
             raise SPFAlreadyDefined(label)
         if value != None and TYPES[type_] != type(value):
             raise SPFIncompatibleType(label, type_, value)
         self.label = label
         self.type = type_
         self.value = value
-        get_context()[self.label] = self
+        context[self.label] = self
 
     def __str__(self):
         if self.value == True:

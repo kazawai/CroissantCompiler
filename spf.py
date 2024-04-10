@@ -58,13 +58,16 @@ if __name__ == "__main__":
                     try:
                         try:
                             tree = parser.parse(input_)
+                            print(tree)
                             result = interpreter.interpret(tree)
                             print(result)
                             input_ = input(">>> ")
-                        except UnexpectedInput:
-                            raise SPFSyntaxError()
+                        except UnexpectedInput as e:
+                            print(e)
+                            break
                     except SPFException as e:
                         print(e)
+                        break
                     global_var.line_counter += 1
         if "--memory" in argv[1:] or "-m" in argv[1:]:
             memory()
