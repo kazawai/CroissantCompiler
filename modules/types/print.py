@@ -13,7 +13,7 @@ def display(args):
     else:
         items = list(map(lambda x : bool_t[x] if type(x) == bool else x, args[1]))
         print(" ".join(map(str,items)))
-   
+
 class Print(Enum):
     """
     Print Expr:

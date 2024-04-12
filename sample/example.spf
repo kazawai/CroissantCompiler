@@ -1,10 +1,5 @@
-entier nombre = 5;
-entier factorielle;
-
-factorielle = 1;
-tant que nombre > 0 faire {
-    factorielle = factorielle * nombre;
-    nombre = nombre - 1;
+liste l = [];
+pour chaque entier i dans [0:10] faire{
+    ajouter i dans l;
 }
-
-afficher "La factorielle vaut", factorielle;
+afficher l;

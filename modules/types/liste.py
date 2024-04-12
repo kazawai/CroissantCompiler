@@ -2,7 +2,7 @@ from enum import Enum
 
 from modules.utils.wrapper import Wrapper
 from modules.exceptions.exception import SPFIndexError
-
+from modules.utils.variable import Variable
 
 def list_bc(args):
     return []
@@ -25,11 +25,9 @@ def range_list(args):
     return list(range(args[0], args[1]))
 
 def add(args):
-    if type(args[1]) != list:
-        args[1] = [args[1]]
-    print(args)
-    print("je passe")
-    return args[1] + [args[0]]
+    current_value = Variable.call(args[1])
+    new_value = current_value +  [args[0]]
+    Variable.modification([args[1], new_value])
 
 class ListExpression(Enum):
     LIST_BC = Wrapper(list_bc)
@@ -39,4 +37,4 @@ class ListExpression(Enum):
     SIZE_LIST = Wrapper(size_list, authorized_types={str : [], list : []}, label_op="taille")
     RANGE_LIST = Wrapper(range_list, authorized_types={int : [int]}, label_op="[..:..]")
     SEQUENCE = Wrapper(lambda args: list(args))
-    ADD = Wrapper(add, authorized_types={str : [list], list : [list], int : [list], bool : [list]}, label_op="ajouter .. dans ..")
+    ADD = Wrapper(add, authorized_types={str : [str], list : [str], int : [str], bool : [str]}, label_op="ajouter .. dans ..")
