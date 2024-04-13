@@ -63,7 +63,8 @@
 
     ?variable: IDENTIFIER -> call
 
-    ?display: PRINT sequence -> print
+    ?display: PRINT expression -> print
+        | PRINT expression "," expression ("," expression)* -> print_seq
 
 
 // Tokens (type has a priority over identifier)
