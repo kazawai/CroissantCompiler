@@ -11,7 +11,7 @@ class SPFException(Exception):
         line_counter -> the current line where the error occured
     """
 
-    def __init__(self, message="error occured in the spf program", context=""):
+    def __init__(self, message="Une erreur est survenue dans le programme spf.", context=""):
         self.line_counter = global_var.line_counter
         # TODO : Print the line where the error occured in the program
         self.context = (
@@ -23,7 +23,7 @@ class SPFException(Exception):
 
         context_message = f"{self.context}\n" if self.context else ""
 
-        error_message = f"ERROR: {self.message} at line {self.line_counter}\n"
+        error_message = f"Erreur: {self.message} at line {self.line_counter}\n"
 
         super().__init__(f"\033[91m{error_message}\033[1m{context_message}\033[0m")
 
@@ -42,7 +42,7 @@ class SPFException(Exception):
 class SPFSyntaxError(SPFException, UnexpectedInput):
 
     def __init__(self, message=""):
-        super().__init__("syntax error : " + message)
+        super().__init__("erreur de syntaxe : " + message)
 
 
 class SPFUnknowVariable(SPFException):
@@ -53,7 +53,7 @@ class SPFUnknowVariable(SPFException):
         label_index = input_context.find(label)
         context = super()._create_context(input_context, label_index, label)
 
-        super().__init__(message=f"unknown variable <{label}>", context=context)
+        super().__init__(message=f"variable inconnue <{label}>", context=context)
 
 
 class SPFUninitializedVariable(SPFException):
@@ -64,7 +64,7 @@ class SPFUninitializedVariable(SPFException):
         label_index = input_context.find(label)
         context = super()._create_context(input_context, label_index, label)
 
-        super().__init__(message=f"uninitialized variable <{label}>", context=context)
+        super().__init__(message=f"variable non initialisée <{label}>", context=context)
 
 
 class SPFAlreadyDefined(SPFException):
@@ -75,7 +75,7 @@ class SPFAlreadyDefined(SPFException):
         label_index = input_context.find(label)
         context = super()._create_context(input_context, label_index, label)
 
-        super().__init__(message=f"redefined variable <{label}>", context=context)
+        super().__init__(message=f"variable redéfinie <{label}>", context=context)
 
 
 class SPFIncompatibleType(SPFException):
@@ -87,7 +87,7 @@ class SPFIncompatibleType(SPFException):
         context = super()._create_context(input_context, label_index, label)
 
         super().__init__(
-            message=f"type <{type}> incompatible with the value <{value}> for the variable <{label}>",
+            message=f"type <{type}> incompatible avec la valeur <{value}> pour la variable <{label}>",
             context=context,
         )
 
@@ -95,7 +95,7 @@ class SPFIncompatibleType(SPFException):
 class SPFIndexError(SPFException):
 
     def __init__(self, index, size):
-        super().__init__(message=f"index <{index}> out of range [0, {size}]")
+        super().__init__(message=f"indice <{index}> hors des bornes [0, {size}]")
 
 
 class SPFUnddefinedExpression(SPFException):
@@ -107,6 +107,6 @@ class SPFUnddefinedExpression(SPFException):
         context = super()._create_context(input_context, label_index, label)
 
         super().__init__(
-            message=f"The expression <{label}> is not defined for the type <{type}>",
+            message=f"L'expression <{label}> n'est pas définie pour le type <{type}>",
             context=context,
         )

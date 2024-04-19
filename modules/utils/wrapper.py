@@ -12,7 +12,7 @@ class Wrapper:
         if len(self.authorized_types.keys()) == 0 or self.authorized_type(*args):
             return self.f(*args, **kwargs)
         raise SPFSyntaxError(
-            f"the type {list(map(type, *args))} cannot be used for this operation {self.label_op} : {list(*args)}"
+            f"Le type {list(map(type, *args))} ne peut pas être utilisé pour cette opération {self.label_op} : {list(*args)}"
         )
 
     def authorized_type(self, args):
