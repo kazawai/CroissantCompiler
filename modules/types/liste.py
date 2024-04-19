@@ -30,18 +30,9 @@ def range_list(args):
 
 
 def add(args):
-    print(args)
-    if not Variable.is_variable(args[1]):
-        return _add_inline(args)
     current_value = Variable.call(args[1])
     new_value = current_value + [args[0]]
     Variable.modification([args[1], new_value])
-
-
-def _add_inline(args):
-    if type(args[1]) == str:
-        return args[1] + args[0]
-    return args[1] + [args[0]]
 
 
 class ListExpression(Enum):

@@ -60,7 +60,7 @@
         | range_list
         | (list_bc|list_gc|range_list|variable) "["expression"]" -> index_list
         | "taille" (list_bc|list_gc|range_list|variable) -> size_list
-        | "ajouter" expression "dans" (IDENTIFIER | list_e) -> add
+        | "ajouter" expression "dans" (IDENTIFIER) -> add
         ?list_bc: "[]" -> list_bc
         ?list_gc: "[" sequence "]" -> list_gc
         ?range_list: "[" expression ":" expression "]" -> range_list
