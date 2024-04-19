@@ -1,0 +1,6 @@
+entier a = 3;
+liste l = [1, 2];
+ajouter a dans l;
+afficher l;
+a = 4;
+afficher l;

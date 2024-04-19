@@ -11,16 +11,19 @@ class Wrapper:
     def __call__(self, *args, **kwargs):
         if len(self.authorized_types.keys()) == 0 or self.authorized_type(*args):
             return self.f(*args, **kwargs)
-        raise SPFSyntaxError(f"the type {list(map(type, *args))} cannot be used for this operation {self.label_op}")
-    
+        raise SPFSyntaxError(
+            f"the type {list(map(type, *args))} cannot be used for this operation {self.label_op} : {list(*args)}"
+        )
+
     def authorized_type(self, args):
         key = type(args[0])
         if key not in self.authorized_types.keys():
             return False
         for i in range(1, len(args)):
             arg = args[i]
-            if len(self.authorized_types[key]) != 0 and type(arg) != self.authorized_types[key][i - 1]:
+            if (
+                len(self.authorized_types[key]) != 0
+                and type(arg) not in self.authorized_types[key]
+            ):
                 return False
         return True
-
-            

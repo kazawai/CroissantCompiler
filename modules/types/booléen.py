@@ -1,8 +1,10 @@
 from enum import Enum
 
+from modules.exceptions.exception import SPFUnddefinedExpression
 from modules.utils.wrapper import Wrapper
 
-VALUES = {"faux" : False, "vrai" : True, False : "faux", True : "vrai"}
+VALUES = {"faux": False, "vrai": True, False: "faux", True: "vrai"}
+
 
 def bool_atomic_value(args):
     match args:
@@ -11,7 +13,7 @@ def bool_atomic_value(args):
         case "vrai":
             return True
         case _:
-            raise Exception(f"the atomic value <{args}> of boolean is not defined ")
+            raise SPFUnddefinedExpression(args, "booléen")
 
 
 def bool_negation(args):
@@ -33,6 +35,8 @@ class BooleanExpression(Enum):
     """
 
     BOOL_ATOMIC_VALUE = Wrapper(bool_atomic_value)
-    BOOL_NEGATION = Wrapper(bool_negation, authorized_types={bool:[bool]}, label_op="non")
-    CONJUNCTION = Wrapper(conjunction, authorized_types={bool:[bool]}, label_op="et")
-    DISJUNCTION = Wrapper(disjunction, authorized_types={bool:[bool]}, label_op="ou")
+    BOOL_NEGATION = Wrapper(
+        bool_negation, authorized_types={bool: [bool]}, label_op="non"
+    )
+    CONJUNCTION = Wrapper(conjunction, authorized_types={bool: [bool]}, label_op="et")
+    DISJUNCTION = Wrapper(disjunction, authorized_types={bool: [bool]}, label_op="ou")

@@ -25,7 +25,7 @@ class Interpreter(Transformer):
             return args.value
         elif isinstance(args, list) and len(args) == 1 and isinstance(args[0], Token):
             return args[0].value
-        elif isinstance(args, Variable):
+        elif isinstance(args, Variable) or isinstance(args, int):
             return args
         elif args is None:  # Empty statement
             return None

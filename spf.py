@@ -44,37 +44,37 @@ if __name__ == "__main__":
                 file = argv[start + 1]
                 try:
                     input = _read(file)
+                    global_var.input = input
                     tree = parser.parse(input)
                     result = interpreter.interpret(tree)
                 except SPFException as e:
-                    print(e)
+                    print(e, file=stderr)
                 except UnexpectedToken as e:
                     print(e.get_context(_read(file)))
-                    print(e)
-                    raise SPFSyntaxError()
+                    global_var.line_counter = e.line
+                    raise SPFSyntaxError("Unexpected Token when reading file")
             else:
                 input_ = input(">>> ")
+                global_var.input = input_
                 while input_ != "sortir":
                     try:
-                        try:
-                            tree = parser.parse(input_)
-                            print(tree)
-                            result = interpreter.interpret(tree)
-                            print(result)
-                            input_ = input(">>> ")
-                        except UnexpectedInput as e:
-                            print(e)
-                            break
+                        tree = parser.parse(input_)
+                        # print(tree)
+                        result = interpreter.interpret(tree)
+                        print(result)
+                        input_ = input(">>> ")
+                    except UnexpectedInput as e:
+                        print(e.get_context(input_))
+                        global_var.line_counter = e.line
+                        raise SPFSyntaxError("Unexpected Input")
                     except SPFException as e:
                         print(e)
-                        break
                     global_var.line_counter += 1
         if "--memory" in argv[1:] or "-m" in argv[1:]:
             memory()
     except SPFException as e:
-        print(e)
+        print(e, file=stderr)
     except Exception as e:
-        print(e)
+        print(e, file=stderr)
         print("An error occurred, dumping memory")
         memory()
-        traceback.print_exc()

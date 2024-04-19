@@ -96,6 +96,10 @@ class Variable:
         except KeyError:
             raise SPFUnknowVariable(args)
 
+    @staticmethod
+    def is_variable(args):
+        return args[0] in global_var.context.keys()
+
 
 class Block(Variable):
 
