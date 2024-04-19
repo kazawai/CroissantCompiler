@@ -34,18 +34,24 @@
         | expression "<" expression -> less
         | expression ">" expression -> greater
 
-    ?arithmetic_op: INTEGER_VALUE -> int_atomic_value
-        | "-" expression -> int_negation
-        | expression "+" expression -> addition
-        | expression "-" expression -> subtraction
-        | expression "*" expression -> multiplication
-        | expression "/" expression -> division
+    ?arithmetic_op: (arithmetic_op|variable) "+" (term|variable|string_e|list_e) -> addition
+        | (arithmetic_op|variable) "-" (term|variable) -> subtraction
+        | term
 
-    ?boolean_e: bool_atomic_value
-        | "non" (bool_atomic_value|variable) -> bool_negation
-        | expression "et" expression -> conjunction
-        | expression "ou" expression -> disjunction
-        ?bool_atomic_value: BOOLEAN_VALUE -> bool_atomic_value
+        ?term: (term|variable) "*" (factor|variable) -> multiplication
+            | (term|variable) "/" (factor|variable) -> division
+            | factor
+
+        ?factor: "-" (factor|variable) -> int_negation
+            | INTEGER_VALUE -> int_atomic_value
+
+    ?boolean_e: bool "et" (boolean_e|variable) -> conjunction 
+        | bool "ou" (boolean_e|variable) -> disjunction
+        | bool
+        
+        ?bool: "non" (bool|variable) -> bool_negation
+            | BOOLEAN_VALUE -> bool_atomic_value
+
 
     ?string_e: TEXT_VALUE -> string_atomic_value
 

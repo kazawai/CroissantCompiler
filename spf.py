@@ -17,7 +17,8 @@ def memory():
 def _read(file):
     if not path.exists(file):
         raise FileNotFoundError(f"fichier {file} non trouvé")
-    if file[-1:-3] != ".spf":
+    print()
+    if file[-4:len(file)] != ".spf":
         raise FileNotFoundError(f"fichier {file} doit avoir l'extension '.spf'")
     with open(file, "r") as f:
         return f.read()

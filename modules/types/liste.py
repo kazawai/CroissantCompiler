@@ -30,6 +30,7 @@ def range_list(args):
 
 
 def add(args):
+    print(args)
     if not Variable.is_variable(args[1]):
         return _add_inline(args)
     current_value = Variable.call(args[1])

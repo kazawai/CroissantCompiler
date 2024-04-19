@@ -97,8 +97,15 @@ class Variable:
             raise SPFUnknowVariable(args)
 
     @staticmethod
-    def is_variable(args):
-        return args[0] in global_var.context.keys()
+    def is_variable(label):
+        current_context = global_var.context
+        i = 0
+        while i < global_var.nested_counter:
+            if label in current_context.keys():
+                return True
+            current_context = current_context["{"].value
+            i += 1
+        return False        
 
 
 class Block(Variable):

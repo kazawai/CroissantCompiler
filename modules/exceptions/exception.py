@@ -23,7 +23,7 @@ class SPFException(Exception):
 
         context_message = f"{self.context}\n" if self.context else ""
 
-        error_message = f"Erreur: {self.message} at line {self.line_counter}\n"
+        error_message = f"Erreur: {self.message} à la ligne {self.line_counter}\n"
 
         super().__init__(f"\033[91m{error_message}\033[1m{context_message}\033[0m")
 
