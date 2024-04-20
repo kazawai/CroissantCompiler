@@ -11,7 +11,9 @@ class SPFException(Exception):
         line_counter -> the current line where the error occured
     """
 
-    def __init__(self, message="Une erreur est survenue dans le programme spf.", context=""):
+    def __init__(
+        self, message="Une erreur est survenue dans le programme spf.", context=""
+    ):
         self.line_counter = global_var.line_counter
         # TODO : Print the line where the error occured in the program
         self.context = (
@@ -27,7 +29,7 @@ class SPFException(Exception):
 
         super().__init__(f"\033[91m{error_message}\033[1m{context_message}\033[0m")
 
-    def _create_context(self, context, index, label):
+    def _create_context(self, context, index=-1, label=""):
         return (
             context
             + "\n"
@@ -35,14 +37,18 @@ class SPFException(Exception):
             + "^" * len(label)
             + "~" * (len(context) - (index + len(label)))
             if index != -1
-            else ""
+            else context + "\n" + "~" * len(context)
         )
 
 
 class SPFSyntaxError(SPFException, UnexpectedInput):
 
-    def __init__(self, message=""):
-        super().__init__("erreur de syntaxe : " + message)
+    def __init__(self, message="", label=""):
+
+        input_context = global_var.input.split("\n")[global_var.line_counter - 1]
+        label_index = input_context.find(label)
+        context = super()._create_context(input_context, label_index, label)
+        super().__init__("erreur de syntaxe : " + message, context=context)
 
 
 class SPFUnknowVariable(SPFException):
@@ -95,7 +101,11 @@ class SPFIncompatibleType(SPFException):
 class SPFIndexError(SPFException):
 
     def __init__(self, index, size):
-        super().__init__(message=f"indice <{index}> hors des bornes [0, {size}]")
+        input_context = global_var.input.split("\n")[global_var.line_counter - 1]
+        context = super()._create_context(input_context)
+        super().__init__(
+            message=f"indice <{index}> hors des bornes [0, {size}]", context=context
+        )
 
 
 class SPFUnddefinedExpression(SPFException):

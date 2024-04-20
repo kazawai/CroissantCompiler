@@ -34,15 +34,15 @@
         | expression "<" expression -> less
         | expression ">" expression -> greater
 
-    ?arithmetic_e: (arithmetic_e|variable) "+" (term|variable|string_e|list_e) -> addition
-        | (arithmetic_e|variable) "-" (term|variable) -> subtraction
+    ?arithmetic_e: (arithmetic_e|variable|list_access) "+" (term|variable|string_e|list_e) -> addition
+        | (arithmetic_e|variable|list_access) "-" (term|variable|list_access) -> subtraction
         | term
 
-        ?term: (term|variable) "*" (factor|variable) -> multiplication
-            | (term|variable) "/" (factor|variable) -> division
+        ?term: (term|variable|list_access) "*" (factor|variable|list_access) -> multiplication
+            | (term|variable|list_access) "/" (factor|variable|list_access) -> division
             | factor
 
-        ?factor: "-" (factor|variable) -> int_negation
+        ?factor: "-" (factor|variable|list_access) -> int_negation
             | INTEGER_VALUE -> int_atomic_value
 
     ?boolean_e: bool "et" (boolean_e|variable) -> conjunction 
@@ -58,11 +58,13 @@
     ?list_e: list_bc //basis case
         | list_gc //general case
         | range_list
-        | (list_bc|list_gc|range_list|variable) "["expression"]" -> index_list
+        | list_access
         | "taille" (list_bc|list_gc|range_list|variable) -> size_list
         ?list_bc: "[]" -> list_bc
         ?list_gc: "[" sequence "]" -> list_gc
         ?range_list: "[" expression ":" expression "]" -> range_list
+
+    ?list_access: (list_bc|list_gc|range_list|variable) "["expression"]" -> index_list
 
     ?sequence: expression ("," expression)*
 

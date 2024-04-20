@@ -1,8 +1,9 @@
+import traceback
 from os import path
 from sys import argv, stderr
 
-from lark import Lark, UnexpectedInput, UnexpectedToken
-from lark.exceptions import UnexpectedInput
+from lark import (Lark, UnexpectedCharacters, UnexpectedEOF, UnexpectedInput,
+                  UnexpectedToken)
 
 from modules.exceptions.exception import SPFException, SPFSyntaxError
 from modules.utils import global_var
@@ -18,30 +19,36 @@ def _read(file):
     if not path.exists(file):
         raise FileNotFoundError(f"fichier {file} non trouvé")
     print()
-    if file[-4:len(file)] != ".spf":
+    if file[-4 : len(file)] != ".spf":
         raise FileNotFoundError(f"fichier {file} doit avoir l'extension '.spf'")
     with open(file, "r") as f:
         return f.read()
 
+
 def prompt():
     input_ = input(">>> ")
-    global_var.input = input_
     while input_ != "sortir":
         try:
+            global_var.input = input_
             tree = parser.parse(input_)
-            # print(tree)
             result = interpreter.interpret(tree)
-            print(result)
+            print(result if (result != [] and result != [None]) else "")
             input_ = input(">>> ")
         except UnexpectedInput as e:
-            print(e.get_context(input_))
+            label = ""
+            if isinstance(e, UnexpectedToken):
+                label = e.token
+            elif isinstance(e, UnexpectedCharacters):
+                label = e.char
+
             global_var.line_counter = e.line
-            print(SPFSyntaxError("Entrée non attendue"))
-        except SPFException as e:
-            print("je passe") #TODO -> broken after catched error   
-            print(e)
-        finally:
+            print(SPFSyntaxError("Entrée non attendue", label), file=stderr)
+            print(traceback.print_exc())
             input_ = ""
+        except SPFException as e:
+            print(e, file=stderr)
+            input_ = ""
+        # Cannot use finally as this actually resets the input everytime (not just after an exception)
         global_var.line_counter += 1
 
 
@@ -65,16 +72,22 @@ if __name__ == "__main__":
                 )
                 file = argv[start + 1]
                 try:
-                    input = _read(file)
-                    global_var.input = input
-                    tree = parser.parse(input)
+                    input_ = _read(file)
+                    global_var.input = input_
+                    tree = parser.parse(input_)
                     result = interpreter.interpret(tree)
                 except SPFException as e:
                     print(e, file=stderr)
                 except UnexpectedToken as e:
-                    print(e.get_context(_read(file)))
+                    label = ""
+                    if isinstance(e, UnexpectedToken):
+                        label = e.token
+                    elif isinstance(e, UnexpectedCharacters):
+                        label = e.char
                     global_var.line_counter = e.line
-                    raise SPFSyntaxError("Symbole non-attendu lu dans le fichier")
+                    raise SPFSyntaxError(
+                        "Symbole non-attendu lu dans le fichier", label
+                    )
             else:
                 prompt()
         if "--memory" in argv[1:] or "-m" in argv[1:]:

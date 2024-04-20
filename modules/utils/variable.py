@@ -105,7 +105,7 @@ class Variable:
                 return True
             current_context = current_context["{"].value
             i += 1
-        return False        
+        return False
 
 
 class Block(Variable):
