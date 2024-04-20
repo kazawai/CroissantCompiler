@@ -18,6 +18,7 @@
         | boolean_e
         | list_e
         | variable
+        | "(" expression ")"
 
     ?block: "{" statement* "}" -> block
 
@@ -34,7 +35,7 @@
         | expression "<" expression -> less
         | expression ">" expression -> greater
 
-    ?arithmetic_e: (arithmetic_e|variable|list_access) "+" (term|variable|string_e|list_e) -> addition
+    ?arithmetic_e: (arithmetic_e|variable|list_e) "+" (term|variable|string_e|list_e) -> addition
         | (arithmetic_e|variable|list_access) "-" (term|variable|list_access) -> subtraction
         | term
 

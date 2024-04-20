@@ -1,4 +1,4 @@
-import traceback
+import readline
 from os import path
 from sys import argv, stderr
 
@@ -43,7 +43,6 @@ def prompt():
 
             global_var.line_counter = e.line
             print(SPFSyntaxError("Entrée non attendue", label), file=stderr)
-            print(traceback.print_exc())
             input_ = ""
         except SPFException as e:
             print(e, file=stderr)
