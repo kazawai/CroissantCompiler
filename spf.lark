@@ -4,7 +4,7 @@
         | condition
         | loop
         | expression DELIMITER
-        | display DELIMITER
+        | instructions DELIMITER
 
     ?assignment: TYPE IDENTIFIER "=" expression -> initialization
         | declaration
@@ -13,7 +13,7 @@
     ?declaration: TYPE IDENTIFIER -> declaration
 
     ?expression: comparison
-        | arithmetic_op
+        | arithmetic_e
         | string_e
         | boolean_e
         | list_e
@@ -34,8 +34,8 @@
         | expression "<" expression -> less
         | expression ">" expression -> greater
 
-    ?arithmetic_op: (arithmetic_op|variable) "+" (term|variable|string_e|list_e) -> addition
-        | (arithmetic_op|variable) "-" (term|variable) -> subtraction
+    ?arithmetic_e: (arithmetic_e|variable) "+" (term|variable|string_e|list_e) -> addition
+        | (arithmetic_e|variable) "-" (term|variable) -> subtraction
         | term
 
         ?term: (term|variable) "*" (factor|variable) -> multiplication
@@ -60,7 +60,6 @@
         | range_list
         | (list_bc|list_gc|range_list|variable) "["expression"]" -> index_list
         | "taille" (list_bc|list_gc|range_list|variable) -> size_list
-        | "ajouter" expression "dans" (IDENTIFIER) -> add
         ?list_bc: "[]" -> list_bc
         ?list_gc: "[" sequence "]" -> list_gc
         ?range_list: "[" expression ":" expression "]" -> range_list
@@ -69,8 +68,10 @@
 
     ?variable: IDENTIFIER -> call
 
-    ?display: PRINT expression -> print
+    ?instructions: PRINT expression -> print
         | PRINT expression "," expression ("," expression)* -> print_seq
+        | "ajouter" expression "dans" (IDENTIFIER) -> add
+
 
 
 // Tokens (type has a priority over identifier)

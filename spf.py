@@ -38,7 +38,7 @@ def prompt():
             global_var.line_counter = e.line
             print(SPFSyntaxError("Entrée non attendue"))
         except SPFException as e:
-            print("je passe") #TODO -> broken after catched error
+            print("je passe") #TODO -> broken after catched error   
             print(e)
         finally:
             input_ = ""
