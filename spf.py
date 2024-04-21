@@ -95,5 +95,5 @@ if __name__ == "__main__":
         print(e, file=stderr)
     except Exception as e:
         print(e, file=stderr)
-        print("Une erreur est survenue, mémoire vidée")
+        print("\033[91mUne erreur est survenue, mémoire vidée\033[0m")
         memory()

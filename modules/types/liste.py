@@ -35,6 +35,10 @@ def add(args):
     Variable.modification([args[1], new_value])
 
 
+def list_add(args):
+    return args[0] + args[1]
+
+
 class ListExpression(Enum):
     LIST_BC = Wrapper(list_bc)
     LIST_GC = Wrapper(list_gc)
@@ -56,4 +60,7 @@ class ListExpression(Enum):
             bool: [str, list],
         },
         label_op="ajouter .. dans ..",
+    )
+    LIST_ADD = Wrapper(
+        list_add, authorized_types={list: [list]}, label_op="[..] + [..]"
     )

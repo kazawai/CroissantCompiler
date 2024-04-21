@@ -35,7 +35,7 @@
         | expression "<" expression -> less
         | expression ">" expression -> greater
 
-    ?arithmetic_e: (arithmetic_e|variable|list_e) "+" (term|variable|string_e|list_e) -> addition
+    ?arithmetic_e: (arithmetic_e|variable|list_access) "+" (term|variable|string_e|list_access) -> addition
         | (arithmetic_e|variable|list_access) "-" (term|variable|list_access) -> subtraction
         | term
 
@@ -60,12 +60,15 @@
         | list_gc //general case
         | range_list
         | list_access
+        | list_add
         | "taille" (list_bc|list_gc|range_list|variable) -> size_list
+        ?list_add: (list_bc|list_gc|range_list|list_add) "+" (list_bc|list_gc|range_list|list_add) -> list_add
         ?list_bc: "[]" -> list_bc
         ?list_gc: "[" sequence "]" -> list_gc
         ?range_list: "[" expression ":" expression "]" -> range_list
 
-    ?list_access: (list_bc|list_gc|range_list|variable) "["expression"]" -> index_list
+    ?list_access: (list_bc|list_gc|range_list|variable|list_add) "["expression"]" -> index_list
+    | "(" (list_bc|list_gc|range_list|variable|list_add) ")" "[" expression "]" -> index_list
 
     ?sequence: expression ("," expression)*
 
