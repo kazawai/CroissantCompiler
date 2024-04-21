@@ -27,7 +27,7 @@ def _read(file):
 
 def prompt():
     input_ = input(">>> ")
-    while input_ != "sortir":
+    while True:
         try:
             global_var.input = input_
             tree = parser.parse(input_)

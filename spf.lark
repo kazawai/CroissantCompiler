@@ -5,6 +5,7 @@
         | loop
         | expression DELIMITER
         | instructions DELIMITER
+        | EXIT_PROGRAM DELIMITER -> exit
 
     ?assignment: TYPE IDENTIFIER "=" expression -> initialization
         | declaration
@@ -88,6 +89,7 @@ IDENTIFIER: /[_a-zA-Zé][\wé_]*/
 TEXT_VALUE.1: /"[^"]*"/
 INTEGER_VALUE.1: /(0)|((-)?[1-9][0-9]*)/
 BOOLEAN_VALUE.1: /faux|vrai/
+EXIT_PROGRAM.1: "sortir"
 
 DELIMITER: ";"
 // Comments are like python comments

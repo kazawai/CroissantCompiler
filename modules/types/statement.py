@@ -2,7 +2,7 @@ from modules.types.booléen import BooleanExpression
 from modules.types.comparison import ComparisonExpression
 from modules.types.entier import ArithmeticExpression
 from modules.types.liste import ListExpression
-from modules.types.print import Print
+from modules.types.system import System
 from modules.types.texte import StringExpression
 from modules.utils.variable import VariableExpression as Variable
 
@@ -11,7 +11,7 @@ class Statement:
 
     def __init__(self):
         self.enum_classes = [
-            Print,
+            System,
             Variable,
             ArithmeticExpression,
             BooleanExpression,
