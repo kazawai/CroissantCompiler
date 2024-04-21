@@ -5,7 +5,6 @@
         | loop
         | expression DELIMITER
         | instructions DELIMITER
-        | EXIT_PROGRAM DELIMITER -> exit
 
     ?assignment: TYPE IDENTIFIER "=" expression -> initialization
         | declaration
@@ -35,7 +34,7 @@
         | expression "<" expression -> less
         | expression ">" expression -> greater
 
-    ?arithmetic_e: (arithmetic_e|variable|list_e) "+" (term|variable|string_e|list_e) -> addition
+    ?arithmetic_e: (arithmetic_e|variable|list_e|string_e) "+" (term|variable|string_e|list_e|string_e) -> addition
         | (arithmetic_e|variable|list_e) "-" (term|variable|list_e) -> subtraction
         | term
 
@@ -47,8 +46,9 @@
             | INTEGER_VALUE -> int_atomic_value
             | "(" arithmetic_e ")"
 
-    ?boolean_e: bool "et" (boolean_e|variable) -> conjunction 
-        | bool "ou" (boolean_e|variable) -> disjunction
+    ?boolean_e: (boolean_e|variable) "et" (boolean_e|variable) -> conjunction 
+        | (boolean_e|variable) "ou" (boolean_e|variable) -> disjunction
+        | "soit" (boolean_e|variable) "soit" (boolean_e|variable) -> xor
         | bool
         
         ?bool: "non" (bool|variable) -> bool_negation
@@ -77,6 +77,8 @@
     ?instructions: PRINT expression -> print
         | PRINT expression "," expression ("," expression)* -> print_seq
         | "ajouter" expression "dans" (IDENTIFIER) -> add
+        | EXIT_PROGRAM -> exit
+
 
 
 

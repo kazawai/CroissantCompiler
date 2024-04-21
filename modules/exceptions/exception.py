@@ -120,3 +120,13 @@ class SPFUnddefinedExpression(SPFException):
             message=f"L'expression <{label}> n'est pas définie pour le type <{type}>",
             context=context,
         )
+
+class SPFBadIdentifier(SPFException):
+
+    def __init__(self, label):
+        input_context = global_var.input.split("\n")[global_var.line_counter - 1]
+        context = super()._create_context(input_context)
+        super().__init__(
+            message=f"L'identifiant de la variable <{label}> est mot clés",
+            context=context
+        )

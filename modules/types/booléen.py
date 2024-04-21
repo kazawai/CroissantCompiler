@@ -27,6 +27,9 @@ def conjunction(args):
 def disjunction(args):
     return args[0] or args[1]
 
+def exclusive_or(args):
+    return args[0] != args[1]
+
 
 class BooleanExpression(Enum):
     """
@@ -40,3 +43,4 @@ class BooleanExpression(Enum):
     )
     CONJUNCTION = Wrapper(conjunction, authorized_types={bool: [bool]}, label_op="et")
     DISJUNCTION = Wrapper(disjunction, authorized_types={bool: [bool]}, label_op="ou")
+    XOR = Wrapper(exclusive_or, authorized_types={bool: [bool]}, label_op="soit ... soit ...")

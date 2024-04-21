@@ -4,18 +4,25 @@ from enum import Enum
 from modules.exceptions.exception import (SPFAlreadyDefined,
                                           SPFIncompatibleType,
                                           SPFUninitializedVariable,
-                                          SPFUnknowVariable)
+                                          SPFUnknowVariable,
+                                          SPFBadIdentifier)
 from modules.utils import global_var
 from modules.utils.wrapper import Wrapper
 
 TYPES = {"booléen": bool, "entier": int, "texte": str, "liste": list, "{": dict}
-KEYWORDS = list(TYPES.keys()) + ["faux", "vrai", "while", "for"]
+KEYWORDS = list(TYPES.keys())[:len(list(TYPES.keys())) - 1] + ["faux", "vrai", "while", "for", "soit", "ajouter", "dans", "sortir"]
 
 
 class Variable:
 
     def __init__(self, label, type_, value=None, debug=True):
         context = get_context()
+        if label in KEYWORDS:
+            raise SPFBadIdentifier(label)
+        if label in context.keys():
+            raise SPFAlreadyDefined(label)
+        if value != None and TYPES[type_] != type(value):
+            raise SPFIncompatibleType(label, type_, value)
         if debug and global_var.debug:
             if value == None:
                 print(
@@ -27,10 +34,7 @@ class Variable:
                     f"DEBUG LIGNE {global_var.line_counter} : déclare {type_} {label} = {value}",
                     file=sys.stderr,
                 )
-        if label in context.keys():
-            raise SPFAlreadyDefined(label)
-        if value != None and TYPES[type_] != type(value):
-            raise SPFIncompatibleType(label, type_, value)
+
         self.label = label
         self.type = type_
         self.value = value
