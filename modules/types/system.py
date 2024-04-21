@@ -22,7 +22,7 @@ def display_seq(args):
     items = list(map(lambda x : display_items[type(x)](x) if type(x) in display_items else x, items))
     print(" ".join(map(str,items)))
 
-class Print(Enum):
+class System(Enum):
     """
     Print Expr:
         used to define how print operations are defined
@@ -30,3 +30,4 @@ class Print(Enum):
 
     PRINT_SEQ = Wrapper(display_seq)
     PRINT = Wrapper(display)
+    EXIT = Wrapper(exit)

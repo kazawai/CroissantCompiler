@@ -5,6 +5,7 @@
         | loop
         | expression DELIMITER
         | instructions DELIMITER
+        | EXIT_PROGRAM DELIMITER -> exit
 
     ?assignment: TYPE IDENTIFIER "=" expression -> initialization
         | declaration
@@ -18,7 +19,6 @@
         | boolean_e
         | list_e
         | variable
-        | "(" expression ")"
 
     ?block: "{" statement* "}" -> block
 
@@ -35,16 +35,17 @@
         | expression "<" expression -> less
         | expression ">" expression -> greater
 
-    ?arithmetic_e: (arithmetic_e|variable|list_access) "+" (term|variable|string_e|list_access) -> addition
-        | (arithmetic_e|variable|list_access) "-" (term|variable|list_access) -> subtraction
+    ?arithmetic_e: (arithmetic_e|variable|list_e) "+" (term|variable|string_e|list_e) -> addition
+        | (arithmetic_e|variable|list_e) "-" (term|variable|list_e) -> subtraction
         | term
 
-        ?term: (term|variable|list_access) "*" (factor|variable|list_access) -> multiplication
-            | (term|variable|list_access) "/" (factor|variable|list_access) -> division
+        ?term: (term|variable|list_e) "*" (factor|variable|list_e) -> multiplication
+            | (term|variable|list_e) "/" (factor|variable|list_e) -> division
             | factor
 
-        ?factor: "-" (factor|variable|list_access) -> int_negation
+        ?factor: "-" (factor|variable|list_e) -> int_negation
             | INTEGER_VALUE -> int_atomic_value
+            | "(" arithmetic_e ")"
 
     ?boolean_e: bool "et" (boolean_e|variable) -> conjunction 
         | bool "ou" (boolean_e|variable) -> disjunction
@@ -68,7 +69,6 @@
         ?range_list: "[" expression ":" expression "]" -> range_list
 
     ?list_access: (list_bc|list_gc|range_list|variable|list_add) "["expression"]" -> index_list
-    | "(" (list_bc|list_gc|range_list|variable|list_add) ")" "[" expression "]" -> index_list
 
     ?sequence: expression ("," expression)*
 
@@ -89,6 +89,7 @@ IDENTIFIER: /[_a-zA-Zé][\wé_]*/
 TEXT_VALUE.1: /"[^"]*"/
 INTEGER_VALUE.1: /(0)|((-)?[1-9][0-9]*)/
 BOOLEAN_VALUE.1: /faux|vrai/
+EXIT_PROGRAM.1: "sortir"
 
 DELIMITER: ";"
 // Comments are like python comments
