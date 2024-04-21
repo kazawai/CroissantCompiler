@@ -36,13 +36,17 @@ def prompt():
             input_ = input(">>> ")
         except UnexpectedInput as e:
             label = ""
+            m = "Entrée non attendue"
             if isinstance(e, UnexpectedToken):
                 label = e.token
             elif isinstance(e, UnexpectedCharacters):
                 label = e.char
+            elif isinstance(e, UnexpectedEOF):
+                label = input_[-1]
+                m = "Entrée non attendue, ';' attendu"
 
             global_var.line_counter = e.line
-            print(SPFSyntaxError("Entrée non attendue", label), file=stderr)
+            print(SPFSyntaxError(m, label), file=stderr)
             input_ = ""
         except SPFException as e:
             print(e, file=stderr)
