@@ -14,7 +14,8 @@ def display(args):
     display_items = {list : display_list, bool : display_bool}
     if type(args[1]) in display_items:
         print(display_items[type(args[1])](args[1]))
-    print(args[1])
+    else:
+        print(args[1])
 
 
 def display_seq(args):
