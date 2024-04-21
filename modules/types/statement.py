@@ -8,7 +8,10 @@ from modules.utils.variable import VariableExpression as Variable
 
 
 class Statement:
-
+    """
+    Statement class group all the enums (semantic rules) inside a list for clean code (Instead of importing all the rules inside the interpreter)
+    in addition to unknown semantic rules. (used for dev debug)
+    """
     def __init__(self):
         self.enum_classes = [
             System,
@@ -21,6 +24,10 @@ class Statement:
         ]
 
     def __getitem__(self, key):
+        """
+        Will look for a given semantic rule 
+        Raise an exception of the rule is unknown
+        """
         for enum_class in self.enum_classes:
             for member in enum_class:
                 if key == member.name:

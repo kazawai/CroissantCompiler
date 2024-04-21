@@ -14,8 +14,27 @@ KEYWORDS = list(TYPES.keys())[:len(list(TYPES.keys())) - 1] + ["faux", "vrai", "
 
 
 class Variable:
+    """
+    Representation of variable inside spf programm
+    """
 
     def __init__(self, label, type_, value=None, debug=True):
+        """
+        Instanciate an object variable base on the given parameters:
+        
+        PARAM
+        -----
+            - label : the name of the variable
+            - type_ : the type of it 
+            - value : the value (might be none if declaration rule)
+            - debug : flag to get info of the variable instanciation 
+
+        CONDITIONS
+        ----------
+            - The variable cannot have as label a keyword.
+            - The variable cannot be redefined.
+            - The type of the value and the type of the variable must match for instanciation rule
+        """
         context = get_context()
         if label in KEYWORDS:
             raise SPFBadIdentifier(label)
@@ -41,6 +60,9 @@ class Variable:
         context[self.label] = self
 
     def __str__(self):
+        """
+        Basic overriding method of the print object function
+        """
         if self.value == True:
             return f"{self.type} {self.label} = vrai"
         if self.value == False:
@@ -48,20 +70,32 @@ class Variable:
         return f"{self.type} {self.label} = {self.value}"
 
     def pop(self):
+        """
+        Remove the variable from the context (like free() in C)
+        """
         del get_context()[self.label]
 
     @staticmethod
     def instanciation(args):
+        """
+        Instanciation rule : create a variable with given value
+        """
         var = Variable(args[1], args[0], args[2])
         return var
 
     @staticmethod
     def declaration(args):
+        """
+        Declaration rule : declare a variable with no value specified
+        """
         var = Variable(args[1], args[0], None)
         return var
 
     @staticmethod
     def call(args):
+        """
+        Call rule : return the value of an existing variable from the context
+        """
         context = global_var.context
         i = 0
         while i < global_var.nested_counter and args not in context.keys():
@@ -82,6 +116,9 @@ class Variable:
 
     @staticmethod
     def modification(args):
+        """
+        Modification rule : modify the value stored inside an existing variable from the context
+        """
         context = global_var.context
         i = 0
         while i < global_var.nested_counter and not args[0] in context.keys():
@@ -102,6 +139,9 @@ class Variable:
 
     @staticmethod
     def is_variable(label):
+        """
+        Used to check if a variable is present inside the context
+        """
         current_context = global_var.context
         i = 0
         while i < global_var.nested_counter:
@@ -113,8 +153,14 @@ class Variable:
 
 
 class Block(Variable):
+    """
+    A block represent a code part in wich the context must be restrained (such as if, while,etc)
+    """
 
     def __init__(self):
+        """
+        Instanciate Block as variable. This have fixed label and value.
+        """
         if global_var.debug:
             print(
                 f"DEBUG LIGNE {global_var.line_counter} : entrée d'un bloc",
@@ -124,6 +170,10 @@ class Block(Variable):
         global_var.nested_counter += 1
 
     def pop(self):
+        """
+        Remove the block from the context resulting in the loss of values contained
+        inside this block.
+        """
         if global_var.debug:
             print(
                 f"DEBUG LIGNE {global_var.line_counter} : sortie d'un bloc",
@@ -139,10 +189,17 @@ class Block(Variable):
 
     @staticmethod
     def new_block(_):
+        """
+        return instance of new block
+        """
         return Block()
 
 
 def get_context():
+    """
+    Give the current context in wich we are inside the program.
+    This goes through the different blocks to find the most nested one.
+    """
     current_context = global_var.context
     i = 0
     while i < global_var.nested_counter:
@@ -154,6 +211,9 @@ def get_context():
 
 
 class VariableExpression(Enum):
+    """
+    Enum of possible variable expressions
+    """
     DECLARATION = Wrapper(Variable.declaration)
     INITIALIZATION = Wrapper(Variable.instanciation)
     CALL = Wrapper(Variable.call)

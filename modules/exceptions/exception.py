@@ -14,6 +14,10 @@ class SPFException(Exception):
     def __init__(
         self, message="Une erreur est survenue dans le programme spf.", context=""
     ):
+        """
+        Instanciate the main SPF exception.
+        Will give the current line, the context and a message specified by the user
+        """
         self.line_counter = global_var.line_counter
         # TODO : Print the line where the error occured in the program
         self.context = (
@@ -42,7 +46,10 @@ class SPFException(Exception):
 
 
 class SPFSyntaxError(SPFException, UnexpectedInput):
-
+    """
+    Exception for syntax error 
+    e.g : entier var =;
+    """
     def __init__(self, message="", label=""):
 
         input_context = global_var.input.split("\n")[global_var.line_counter - 1]
@@ -52,7 +59,10 @@ class SPFSyntaxError(SPFException, UnexpectedInput):
 
 
 class SPFUnknowVariable(SPFException):
-
+    """
+    Exception for undeclared variables
+    e.g : var = 10; #the variable was never declared
+    """
     def __init__(self, label):
         input_context = global_var.input.split("\n")[global_var.line_counter - 1]
         # Spot the variable in the input context
@@ -63,7 +73,11 @@ class SPFUnknowVariable(SPFException):
 
 
 class SPFUninitializedVariable(SPFException):
-
+    """
+    Exception used when an operation use a variable with no value inside.
+    e.g : entier var;
+          var + 10; #raise exception
+    """
     def __init__(self, label):
         input_context = global_var.input.split("\n")[global_var.line_counter - 1]
         # Spot the variable in the input context
@@ -74,7 +88,11 @@ class SPFUninitializedVariable(SPFException):
 
 
 class SPFAlreadyDefined(SPFException):
-
+    """
+    Expection for instanciating variables that already instanciated
+    e.g : entier var = 10;
+          entier var = 20; #raise exception
+    """
     def __init__(self, label):
         input_context = global_var.input.split("\n")[global_var.line_counter - 1]
         # Spot the variable in the input context
@@ -85,7 +103,10 @@ class SPFAlreadyDefined(SPFException):
 
 
 class SPFIncompatibleType(SPFException):
-
+    """
+    Exception for operations where arguments have  incompatible types
+    e.g : 10 + vrai; #since vrai has a boolean type, the exception is raised
+    """
     def __init__(self, label, type, value):
         input_context = global_var.input.split("\n")[global_var.line_counter - 1]
         # Spot the variable in the input context
@@ -99,7 +120,9 @@ class SPFIncompatibleType(SPFException):
 
 
 class SPFIndexError(SPFException):
-
+    """
+    Exception used when we want to access to a list with a too big index
+    """
     def __init__(self, index, size):
         input_context = global_var.input.split("\n")[global_var.line_counter - 1]
         context = super()._create_context(input_context)
@@ -109,7 +132,9 @@ class SPFIndexError(SPFException):
 
 
 class SPFUnddefinedExpression(SPFException):
-
+    """
+    Exception for expression that has not been defined either grammar side or code.
+    """
     def __init__(self, label, type):
         input_context = global_var.input.split("\n")[global_var.line_counter - 1]
         # Spot the variable in the input context
@@ -122,7 +147,9 @@ class SPFUnddefinedExpression(SPFException):
         )
 
 class SPFBadIdentifier(SPFException):
-
+    """
+    Exception for instanciation variables with a bad name (i.e. keyword as label)
+    """
     def __init__(self, label):
         input_context = global_var.input.split("\n")[global_var.line_counter - 1]
         context = super()._create_context(input_context)

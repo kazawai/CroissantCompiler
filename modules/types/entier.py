@@ -8,11 +8,6 @@ def int_atomic_value(args):
         args = args[0]
     return int(args)
 
-
-def int_negation(args):
-    return -args[0]
-
-
 class ArithmeticExpression(Enum):
     """
     Arithmetic Expr:

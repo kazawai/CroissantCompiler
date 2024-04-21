@@ -5,42 +5,66 @@ from modules.utils.variable import Variable
 from modules.utils.wrapper import Wrapper
 
 
-def list_bc(args):
+def list_bc(_): 
+    """
+    return the basis case of a list -> empty list
+    """
     return []
 
 
 def list_gc(args):
+    """
+    return the general case -> a list of arbitrary sequence of elements
+    """
     if type(args[0]) == list:
         return list(args[0])
     return args
 
 
 def index_list(args):
+    """
+    return element of a list by a given index
+    """
     if args[1] < 0 or args[1] >= len(args[0]):
         raise SPFIndexError(args[1], len(args[0]))
     return args[0][args[1]]
 
 
 def size_list(args):
+    """
+    give the length of a list
+    """
     return len(args[0])
 
 
 def range_list(args):
+    """
+    by using range mechanism, return a list
+    """
     return list(range(args[0], args[1]))
 
 
 def add(args):
+    """
+    append an element to the end of list
+    """
     current_value = Variable.call(args[1])
     new_value = current_value + [args[0]]
     Variable.modification([args[1], new_value])
 
 
 def list_add(args):
+    """
+    concatenate 2 lists
+    """
     return args[0] + args[1]
 
 
 class ListExpression(Enum):
-    LIST_BC = Wrapper(list_bc)
+    """
+    All semantic rules of list objects
+    """
+    LIST_BC = Wrapper(lambda _ : [])
     LIST_GC = Wrapper(list_gc)
 
     INDEX_LIST = Wrapper(
