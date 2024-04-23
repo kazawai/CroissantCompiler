@@ -2,6 +2,7 @@
 Entry of the programm where all the user input will be handled and interpreted.
 """
 
+import readline as rl  # Readlines for easy history and copy-paste
 from os import path
 from sys import argv, stderr
 
@@ -27,14 +28,17 @@ def _read(file):
     """
     Read a given SPF file to be interpreted
     """
-    if not path.exists(file): #not found with given path
+    if not path.exists(file):  # not found with given path
         raise FileNotFoundError(f"fichier {file} non trouvé")
     print()
-    if file[-4 : len(file)] != ".spf": #does not respect the naming convention of SPF files
+    if (
+        file[-4 : len(file)] != ".spf"
+    ):  # does not respect the naming convention of SPF files
         raise FileNotFoundError(f"fichier {file} doit avoir l'extension '.spf'")
     with open(file, "r") as f:
         return f.read()
-    
+
+
 def help():
     return """
 BIENVENUE DANS LE PROGRAMME SPF !
@@ -92,15 +96,15 @@ def prompt():
 
 
 if __name__ == "__main__":
-    global_var.init() #instanciation of the needed globals variables
+    global_var.init()  # instanciation of the needed globals variables
     try:
-        with open(GRAMMAR_PATH, "r") as grammar: 
-            interpreter = Interpreter() #entry of the spf interpreter
+        with open(GRAMMAR_PATH, "r") as grammar:
+            interpreter = Interpreter()  # entry of the spf interpreter
             parser = Lark(
                 grammar,
-                parser="lalr", #in our case, one look ahead (i.e. LALR(1))
+                parser="lalr",  # in our case, one look ahead (i.e. LALR(1))
                 transformer=interpreter,
-                propagate_positions=True, #used for getting current line
+                propagate_positions=True,  # used for getting current line
             )
             if "--help" in argv[1:] or "-h" in argv[1:]:
                 print(help())
@@ -108,7 +112,8 @@ if __name__ == "__main__":
             if "--debug" in argv[1:] or "-d" in argv[1:]:
                 global_var.debug = True
 
-            if "--file" in argv[1:] or "-f" in argv[1:]: #if file path specified, will interpret it and return the result
+            # if file path specified, will interpret it and return the result
+            if "--file" in argv[1:] or "-f" in argv[1:]:
                 start = (
                     argv.index("--file") if "--file" in argv[1:] else argv.index("-f")
                 )
@@ -121,7 +126,7 @@ if __name__ == "__main__":
                     print(e, file=stderr)
                 except UnexpectedToken as e:
                     label = ""
-                    if isinstance(e, UnexpectedToken): #syntax error from grammar
+                    if isinstance(e, UnexpectedToken):  # syntax error from grammar
                         label = e.token
                     elif isinstance(e, UnexpectedCharacters):
                         label = e.char
@@ -137,5 +142,7 @@ if __name__ == "__main__":
         print(e, file=stderr)
     except Exception as e:
         print(e, file=stderr)
-        print("\033[91mUne erreur est survenue, mémoire vidée\033[0m\n\033[92mutilisez -h si besoin\033[0m")
+        print(
+            "\033[91mUne erreur est survenue, mémoire vidée\033[0m\n\033[92mutilisez -h si besoin\033[0m"
+        )
         memory()

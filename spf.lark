@@ -49,6 +49,7 @@
     ?boolean_e: (boolean_e|variable) "et" (boolean_e|variable) -> conjunction 
         | (boolean_e|variable) "ou" (boolean_e|variable) -> disjunction
         | "soit" (boolean_e|variable) "soit" (boolean_e|variable) -> xor
+        | "(" boolean_e ")"
         | bool
         
         ?bool: "non" (bool|variable) -> bool_negation
