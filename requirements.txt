@@ -1,0 +1,4 @@
+# Requirements
+
+lark == 1.1.9
+# Other imports should be native to Python 3.11

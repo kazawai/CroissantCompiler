@@ -46,11 +46,15 @@
             | INTEGER_VALUE -> int_atomic_value
             | "(" arithmetic_e ")"
 
-    ?boolean_e: (boolean_e|variable) "et" (boolean_e|variable) -> conjunction 
-        | (boolean_e|variable) "ou" (boolean_e|variable) -> disjunction
-        | "soit" (boolean_e|variable) "soit" (boolean_e|variable) -> xor
-        | "(" boolean_e ")"
-        | bool
+    ?boolean_e: "soit" (boolean_e|variable) "soit" (boolean_e_conj|variable) -> xor
+        | boolean_e_conj
+
+        ?boolean_e_conj: (boolean_e_conj|variable) "et" (boolean_e_dis|variable) -> conjunction
+          | boolean_e_dis
+
+        ?boolean_e_dis: (boolean_e_dis|variable) "ou" (boolean_e_dis|variable) -> disjunction
+          | "(" boolean_e ")"
+          | bool
         
         ?bool: "non" (bool|variable) -> bool_negation
             | BOOLEAN_VALUE -> bool_atomic_value

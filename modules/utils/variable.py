@@ -1,16 +1,24 @@
 import sys
 from enum import Enum
 
-from modules.exceptions.exception import (SPFAlreadyDefined,
+from modules.exceptions.exception import (SPFAlreadyDefined, SPFBadIdentifier,
                                           SPFIncompatibleType,
                                           SPFUninitializedVariable,
-                                          SPFUnknowVariable,
-                                          SPFBadIdentifier)
+                                          SPFUnknowVariable)
 from modules.utils import global_var
 from modules.utils.wrapper import Wrapper
 
 TYPES = {"booléen": bool, "entier": int, "texte": str, "liste": list, "{": dict}
-KEYWORDS = list(TYPES.keys())[:len(list(TYPES.keys())) - 1] + ["faux", "vrai", "while", "for", "soit", "ajouter", "dans", "sortir"]
+KEYWORDS = list(TYPES.keys())[: len(list(TYPES.keys())) - 1] + [
+    "faux",
+    "vrai",
+    "while",
+    "for",
+    "soit",
+    "ajouter",
+    "dans",
+    "sortir",
+]
 
 
 class Variable:
@@ -21,13 +29,13 @@ class Variable:
     def __init__(self, label, type_, value=None, debug=True):
         """
         Instanciate an object variable base on the given parameters:
-        
+
         PARAM
         -----
             - label : the name of the variable
-            - type_ : the type of it 
+            - type_ : the type of the variable
             - value : the value (might be none if declaration rule)
-            - debug : flag to get info of the variable instanciation 
+            - debug : flag to get info of the variable instanciation
 
         CONDITIONS
         ----------
@@ -68,6 +76,12 @@ class Variable:
         if self.value == False:
             return f"{self.type} {self.label} = faux"
         return f"{self.type} {self.label} = {self.value}"
+
+    def __repr__(self) -> str:
+        """
+        Basic overriding method of the print object function
+        """
+        return self.__str__()
 
     def pop(self):
         """
@@ -214,6 +228,7 @@ class VariableExpression(Enum):
     """
     Enum of possible variable expressions
     """
+
     DECLARATION = Wrapper(Variable.declaration)
     INITIALIZATION = Wrapper(Variable.instanciation)
     CALL = Wrapper(Variable.call)
