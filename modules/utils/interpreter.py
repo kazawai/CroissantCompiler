@@ -6,6 +6,8 @@ from modules.utils.variable import Block, Variable, global_var
 
 class Interpreter(Transformer):
 
+    primitives = (int, str, bool)  # basic types
+
     @v_args()
     def interpret(self, args, statement_type=Statement()):
         """
@@ -16,7 +18,7 @@ class Interpreter(Transformer):
         if isinstance(args, Tree):
             type = args.data.upper()
             global_var.line_counter = args.meta.line
-            #in the case of branching or loops -> work differently compared to basic semantic rules
+            # in the case of branching or loops -> work differently compared to basic semantic rules
             if "COND" in type:
                 return self.cond(type, args)
             elif type == "WHILE":
@@ -24,19 +26,20 @@ class Interpreter(Transformer):
             elif type == "FOR":
                 return self.for_(args)
             elif type == "STATEMENT":
-                return self.interpret(args.children[0]) #axiom of syntax tree
+                return self.interpret(args.children[0])  # axiom of syntax tree
 
             return statement_type[type](self.interpret(args.children))
         elif isinstance(args, Token):
-            return args.value #lexem
+            return args.value  # lexem
         elif isinstance(args, list) and len(args) == 1 and isinstance(args[0], Token):
-            return args[0].value #same as lexem
-        elif isinstance(args, Variable) or isinstance(args, int):
+            return args[0].value  # same as lexem
+        elif isinstance(args, Variable) or isinstance(args, self.primitives):
             return args
         elif args is None:  # Empty statement
             return None
         else:
-            return [self.interpret(node) for node in args] #basic inner nodes (i.e. productions)
+            # basic inner nodes (i.e. productions)
+            return [self.interpret(node) for node in args]
 
     def cond(self, type, tree):
         """
