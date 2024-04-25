@@ -71,9 +71,9 @@ class Variable:
         """
         Basic overriding method of the print object function
         """
-        if self.value == True:
+        if TYPES[self.type] == bool and self.value == True:
             return f"{self.type} {self.label} = vrai"
-        if self.value == False:
+        if TYPES[self.type] == bool and self.value == False:
             return f"{self.type} {self.label} = faux"
         return f"{self.type} {self.label} = {self.value}"
 
