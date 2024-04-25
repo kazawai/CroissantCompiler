@@ -61,6 +61,7 @@
 
 
     ?string_e: TEXT_VALUE -> string_atomic_value
+        | "taille" TEXT_VALUE -> size_text
 
     ?list_e: list_bc //basis case
         | list_gc //general case
