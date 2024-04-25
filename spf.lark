@@ -61,7 +61,10 @@
 
 
     ?string_e: TEXT_VALUE -> string_atomic_value
-        | "taille" TEXT_VALUE -> size_text
+        | "taille" TEXT_VALUE -> size_string
+        | string_access
+
+      ?string_access: (TEXT_VALUE) "["expression"]" -> index_string
 
     ?list_e: list_bc //basis case
         | list_gc //general case
