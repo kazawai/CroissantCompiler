@@ -32,6 +32,16 @@ def display_list(l):
 
 
 def render_displayable_item(item)->str:
+    """
+    render_displayable_item:
+        used to display the nice string for the item value.
+
+    Parameters:
+        item : the argument to display.
+
+    Returns:
+        str: the value in string format.
+    """
     bool_t = {True: "vrai", False: "faux"}
     if type(item) == bool:
         return bool_t[item]
@@ -42,16 +52,7 @@ def render_displayable_item(item)->str:
     return str(item)
 
 def display(args):
-    """
-    display:
-        used to display a value.
-
-    Parameters:
-        args (list): the arguments to display.
-
-    Returns:
-        str: the value in string format.
-    """
+   
     display_items = {list: display_list, bool: display_bool}
     if type(args[1]) in display_items:
         print(display_items[type(args[1])](args[1]))
