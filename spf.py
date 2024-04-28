@@ -74,6 +74,9 @@ def prompt():
             result = interpreter.interpret(tree)
             print(result if (result != [] and result != [None]) else "")
             input_ = input(">>> ")
+        except SPFException as e:
+            print(e, file=stderr)
+            input_ = ""
         except UnexpectedInput as e:
             label = ""
             m = "Entrée non attendue"
@@ -85,11 +88,10 @@ def prompt():
                 label = input_[-1]
                 m = "Entrée non attendue, ';' attendu"
 
-            global_var.line_counter = e.line
+            global_var.line_counter = (
+                e.line if hasattr(e, "line") else global_var.line_counter
+            )
             print(SPFSyntaxError(m, label), file=stderr)
-            input_ = ""
-        except SPFException as e:
-            print(e, file=stderr)
             input_ = ""
         # Cannot use finally as this actually resets the input everytime (not just after an exception)
         global_var.line_counter += 1
