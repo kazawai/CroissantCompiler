@@ -20,10 +20,12 @@ This will take you to the interactive shell, where you can write your code. The
 compiler will then parse and execute it line by line, updating the global
 context every time.
 
-> [!NOTE] If you want to exit the shell, you can type `sortir;` (don't forget
+> [!NOTE]
+> If you want to exit the shell, you can type `sortir;` (don't forget
 > the semicolon at the end).
 
-> [!NOTE] If you want to see the list of available commands, you can type run
+> [!NOTE]
+> If you want to see the list of available commands, you can type run
 > the `python spf.py --help` command.
 
 ## Virtual environment
@@ -165,7 +167,8 @@ afficher mots;
 ["Bonjour", "à", "tout", "le", "monde"]
 ```
 
-> [!NOTE] You can find more examples in the `sample/` directory.
+> [!NOTE]
+> You can find more examples in the `sample/` directory.
 
 # Acknowledgements
 
