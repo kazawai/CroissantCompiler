@@ -6,10 +6,11 @@ pour chaque texte caractère dans phrase faire {
         si taille mot > 0 alors {
             ajouter mot dans mots;
             mot = "";
-}
-} sinon {
+        }
+    } sinon {
         mot = mot + caractère;
-} }
+    }
+}
 # Potentiel dernier mot
 si taille mot > 0 alors {
     ajouter mot dans mots;

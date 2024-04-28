@@ -3,7 +3,8 @@ booléen monotone = vrai;
 pour chaque entier position dans [1:taille nombres - 1] faire {
     si nombres[position] > nombres[position + 1] alors {
         monotone = faux;
-} }
+    }
+}
 si monotone alors {
     afficher "La liste", nombres, "est monotone";
 } sinon {
