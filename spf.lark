@@ -73,6 +73,7 @@
         | list_add
         | "taille" (list_bc|list_gc|range_list|variable) -> size_list
         ?list_add: (list_bc|list_gc|range_list|list_add) "+" (list_bc|list_gc|range_list|list_add) -> list_add
+          | "(" list_e ")"
         ?list_bc: "[]" -> list_bc
         ?list_gc: "[" sequence "]" -> list_gc
         ?range_list: "[" expression ":" expression "]" -> range_list
