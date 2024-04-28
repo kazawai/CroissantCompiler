@@ -78,7 +78,7 @@
         ?list_gc: "[" sequence "]" -> list_gc
         ?range_list: "[" expression ":" expression "]" -> range_list
 
-    ?list_access: (list_bc|list_gc|range_list|variable|list_add) "["expression"]" -> index_list
+    ?list_access: (list_gc|range_list|variable) "["expression"]" -> index_list
 
     ?sequence: expression ("," expression)*
 
