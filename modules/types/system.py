@@ -2,7 +2,6 @@ from enum import Enum
 
 from modules.utils.wrapper import Wrapper
 
-
 def display_bool(b) -> str:
     """
     display_bool:
@@ -31,6 +30,16 @@ def display_list(l):
     """
     return "[%s]" % ", ".join(map(str, l))
 
+
+def render_displayable_item(item)->str:
+    bool_t = {True: "vrai", False: "faux"}
+    if type(item) == bool:
+        return bool_t[item]
+    elif type(item) == list:
+        return "[%s]" % ", ".join(map(render_displayable_item, item))
+    elif type(item) == str:
+        return '"'+ item +'"'
+    return str(item)
 
 def display(args):
     """
@@ -80,5 +89,5 @@ class System(Enum):
     """
 
     PRINT_SEQ = Wrapper(display_seq)
-    PRINT = Wrapper(display)
+    PRINT = Wrapper(lambda args : print(render_displayable_item(args[1])))
     EXIT = Wrapper(exit)

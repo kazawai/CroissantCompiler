@@ -41,7 +41,7 @@ def range_list(args):
     """
     by using range mechanism, return a list
     """
-    return list(range(args[0], args[1] + 1))
+    return list(range(args[0], args[1]))
 
 
 def add(args):
