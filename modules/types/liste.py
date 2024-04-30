@@ -25,9 +25,12 @@ def index_list(args):
     """
     return element of a list by a given index
     """
-    if args[1] < 0 or args[1] >= len(args[0]):
-        raise SPFIndexError(args[1], len(args[0]))
-    return args[0][args[1]]
+    index = args[1] 
+    print(index)
+    print(args)
+    if index < 1 or index > len(args[0]):
+        raise SPFIndexError(index, len(args[0]))
+    return args[0][index - 1]
 
 
 def size_list(args):
@@ -41,7 +44,7 @@ def range_list(args):
     """
     by using range mechanism, return a list
     """
-    return list(range(args[0], args[1]))
+    return list(range(args[0], args[1] + 1))
 
 
 def add(args):

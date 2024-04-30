@@ -5,9 +5,10 @@ from modules.utils.wrapper import Wrapper
 
 
 def index_string(args):
-    if args[1] < 0 or args[1] >= len(args[0]) - 2:
-        raise SPFIndexError(args[1], len(args[0]) - 3)
-    return args[0].strip('"')[args[1]]
+    index = args[1] 
+    if index < 1 or index > len(args[0]) - 2:
+        raise SPFIndexError(index, len(args[0]) - 3)
+    return args[0].strip('"')[index - 1]
 
 
 class StringExpression(Enum):

@@ -34,7 +34,7 @@
         | expression "<" expression -> less
         | expression ">" expression -> greater
 
-    ?arithmetic_e: (arithmetic_e|variable|list_e) "+" (term|variable|list_e) -> addition
+    ?arithmetic_e: (arithmetic_e|variable|list_e|string_e) "+" (term|variable|list_e|string_e) -> addition
         | (arithmetic_e|variable|list_e) "-" (term|variable|list_e) -> subtraction
         | term
 
@@ -61,7 +61,6 @@
 
 
     ?string_e: TEXT_VALUE -> string_atomic_value
-        | (TEXT_VALUE) "+" (TEXT_VALUE) -> concat_string
         | "taille" TEXT_VALUE -> size_string
         | string_access
         | "("string_e")"
@@ -80,6 +79,7 @@
         ?range_list: "[" expression ":" expression "]" -> range_list
 
     ?list_access: (list_gc|range_list|variable) "["expression"]" -> index_list
+        | "("arithmetic_e")" "["expression"]" -> index_list
 
     ?sequence: expression ("," expression)*
 
