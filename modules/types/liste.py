@@ -26,8 +26,6 @@ def index_list(args):
     return element of a list by a given index
     """
     index = args[1] 
-    print(index)
-    print(args)
     if index < 1 or index > len(args[0]):
         raise SPFIndexError(index, len(args[0]))
     return args[0][index - 1]
