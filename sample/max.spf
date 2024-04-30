@@ -1,6 +1,6 @@
 liste nombres = [1, 8, 3, 6];
 entier maximum;
-maximum = nombres[0];
+maximum = nombres[1];
 pour chaque entier nombre dans nombres faire {
     si nombre > maximum alors {
         maximum = nombre;

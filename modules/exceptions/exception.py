@@ -127,7 +127,7 @@ class SPFIndexError(SPFException):
         input_context = global_var.input.split("\n")[global_var.line_counter - 1]
         context = super()._create_context(input_context)
         super().__init__(
-            message=f"indice <{index}> hors des bornes [0, {size}]", context=context
+            message=f"indice <{index}> hors des bornes [1, {size}]", context=context
         )
 
 

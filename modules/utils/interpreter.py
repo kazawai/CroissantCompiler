@@ -75,7 +75,7 @@ class Interpreter(Transformer):
         l = self.interpret(tree.children[1])
         print(l)
         i = 0
-        while i <= len(l):
+        while i < len(l):
             Variable.modification([str(var.label), l[i]])
             self.interpret(tree.children[2])
             i += 1
